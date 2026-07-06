@@ -687,8 +687,35 @@ function showResult(){
       +'<div class="exit-txt">Получите <strong>PDF-отчёт «Рынок технадзора ИЖС: '+region+'»</strong> — с детальными данными, ценами по нише и топ-каналами для вашего типа рынка.</div>'
     +'</div>';
 
-  document.getElementById("cta").innerHTML =
-  '\n    '<div class=\"cta-h\">Получите гайд и отчёт по вашему региону</div>'\n    +'<div class=\"cta-sub\">Мы отправим материалы на почту и в выбранный мессенджер, как только вы подключите ботов.</div>'\n    +'<div class=\"lm-card\">'\n      +'<div class=\"lm-ico\">📋</div>'\n      +'<div>'\n        +'<div class=\"lm-title\">Что вы получите</div>'\n        +'<div class=\"lm-desc\">Краткий гайд по первым шагам в технадзоре ИЖС и аналитический отчёт по рынку.</div>'\n        +'<div class=\"lm-items\">'\n          +'<div class=\"lm-item\">Чек-лист «Первый выезд на объект»</div>'\n          +'<div class=\"lm-item\">Краткая карточка по вашему региону</div>'\n          +'<div class=\"lm-item\">Сценарии дохода и точки роста</div>'\n        +'</div>'\n      +'</div>'\n    +'</div>'\n    +'<div id=\"cwrap\" style=\"max-width:440px;margin:0 auto\">'\n    +'<input type=\"text\" id=\"ci-name\" class=\"ci\" placeholder=\"Ваше имя\">'\n    +'<input type=\"text\" id=\"ci-email\" class=\"ci\" placeholder=\"Email\">'\n    +'<div style=\"font-size:12px;color:var(--muted);margin:8px 0 6px\">Где удобнее получить гайд дополнительно?</div>'\n    +'<div class=\"channel-row\">'\n      +'<button type=\"button\" class=\"ch-btn ch-btn-active\" data-ch=\"tg\" onclick=\"selectChannel(\\'tg\\')\">Telegram</button>'\n      +'<button type=\"button\" class=\"ch-btn\" data-ch=\"max\" onclick=\"selectChannel(\\'max\\')\">MAX</button>'\n      +'<button type=\"button\" class=\"ch-btn\" data-ch=\"vk\" onclick=\"selectChannel(\\'vk\\')\">ВКонтакте</button>'\n    +'</div>'\n    +'<button class=\"btn full\" onclick=\"submitContact()\">Получить гайд →</button>'\n    +'<div class=\"hint\">Сейчас мы сохраняем только ваш email и выбранный мессенджер. Отправку подключим после настройки ботов.</div>'\n    +'</div>'\n    +'<button class=\"restart\" onclick=\"location.reload()\">← Пройти ещё раз (другой регион)</button>'\n;
+  document.getElementById("cta").innerHTML = [
+    '<div class="cta-h">Получите гайд и отчёт по вашему региону</div>',
+    '<div class="cta-sub">Мы отправим материалы на почту и в выбранный мессенджер, как только вы подключите ботов.</div>',
+    '<div class="lm-card">',
+      '<div class="lm-ico">📋</div>',
+      '<div>',
+        '<div class="lm-title">Что вы получите</div>',
+        '<div class="lm-desc">Краткий гайд по первым шагам в технадзоре ИЖС и аналитический отчёт по рынку.</div>',
+        '<div class="lm-items">',
+          '<div class="lm-item">Чек-лист «Первый выезд на объект»</div>',
+          '<div class="lm-item">Краткая карточка по вашему региону</div>',
+          '<div class="lm-item">Сценарии дохода и точки роста</div>',
+        '</div>',
+      '</div>',
+    '</div>',
+    '<div id="cwrap" style="max-width:440px;margin:0 auto">',
+      '<input type="text" id="ci-name" class="ci" placeholder="Ваше имя">',
+      '<input type="text" id="ci-email" class="ci" placeholder="Email">',
+      '<div style="font-size:12px;color:var(--muted);margin:8px 0 6px">Где удобнее получить гайд дополнительно?</div>',
+      '<div class="channel-row">',
+        '<button type="button" class="ch-btn ch-btn-active" data-ch="tg" onclick="selectChannel('tg')">Telegram</button>',
+        '<button type="button" class="ch-btn" data-ch="max" onclick="selectChannel('max')">MAX</button>',
+        '<button type="button" class="ch-btn" data-ch="vk" onclick="selectChannel('vk')">ВКонтакте</button>',
+      '</div>',
+      '<button class="btn full" onclick="submitContact()">Получить гайд →</button>',
+      '<div class="hint">Сейчас мы сохраняем только ваш email и выбранный мессенджер. Отправку подключим после настройки ботов.</div>',
+    '</div>',
+    '<button class="restart" onclick="location.reload()">← Пройти ещё раз (другой регион)</button>'
+  ].join("")
 
   show("s-result");
   setTimeout(function(){
