@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Готов ли ваш регион к технадзору ИЖС?</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060F08;--bg2:#0B1A0E;--bg3:#0F2214;
+  --accent:#3A9B3F;--al:#5DBF62;--aglow:rgba(58,155,63,.12);
+  --text:#F2F5EE;--muted:#8FAA8A;--dim:#A9C7A9;
+  --border:rgba(255,255,255,.07);--card:rgba(255,255,255,.04)
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  line-height:1.6;overflow-x:hidden}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.show{display:flex}
+
+/* ── header ── */
+.hdr{display:flex;justify-content:space-between;align-items:center;
+  padding:16px 32px;border-bottom:1px solid var(--border);flex-shrink:0;
+  position:sticky;top:0;background:var(--bg);z-index:50}
+.brand{font-size:9px;font-weight:900;letter-spacing:.2em;color:var(--al);text-transform:uppercase}
+.prog{display:flex;align-items:center;gap:10px}
+.prog-label{font-size:11px;color:var(--dim)}
+.prog-label b{color:#7FC87F}
+.pbar-bg{width:90px;height:3px;background:rgba(255,255,255,.05);border-radius:2px}
+.pbar-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;width:0}
+.block-badge{font-size:9px;font-weight:800;letter-spacing:.15em;color:var(--bg);
+  background:var(--accent);padding:3px 9px;border-radius:20px;text-transform:uppercase}
+
+/* ── wrap ── */
+.wrap{flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:44px 32px 120px;max-width:660px;margin:0 auto;width:100%}
+
+/* ── start ── */
+.pill{display:inline-flex;gap:14px;padding:6px 14px;border:1px solid var(--border);
+  border-radius:100px;font-size:10px;letter-spacing:.1em;color:var(--text);margin-bottom:24px}
+.pill b{color:var(--al)}
+.h1{font-size:clamp(24px,4.5vw,44px);font-weight:900;line-height:1.1;margin-bottom:18px;letter-spacing:-.02em}
+.h1 em{font-style:italic;font-weight:400;color:#7FC87F}
+.hdesc{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:36px;max-width:500px}
+.hdesc strong{color:var(--text)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;
+  background:var(--accent);color:#fff;font-size:15px;font-weight:700;
+  border:none;border-radius:8px;cursor:pointer;transition:background .15s;white-space:nowrap}
+.btn:hover{background:var(--al)}
+.btn.full{width:100%;justify-content:center}
+.start-meta{display:flex;gap:18px;margin-top:24px;flex-wrap:wrap}
+.sm{display:flex;align-items:center;gap:7px;font-size:10px;color:var(--text);letter-spacing:.06em}
+.sdot{width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+/* ── rules ── */
+.rlbl{font-size:9px;font-weight:800;letter-spacing:.22em;color:var(--al);text-transform:uppercase;margin-bottom:14px}
+.rtitle{font-size:clamp(19px,3.2vw,30px);font-weight:800;line-height:1.3;margin-bottom:32px}
+.rtitle em{font-style:italic;font-weight:400}
+.rules{display:flex;flex-direction:column;gap:16px;margin-bottom:32px}
+.rule{display:flex;gap:14px}
+.rn{font-size:12px;font-weight:800;color:var(--accent);min-width:18px;padding-top:2px}
+.rt{font-size:14px;color:var(--muted);line-height:1.65}
+.rt strong{color:var(--text)}
+
+/* ── question ── */
+.qlbl{font-size:9px;font-weight:800;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.qtitle{font-size:clamp(17px,2.6vw,24px);font-weight:800;line-height:1.35;margin-bottom:26px}
+.alist{display:flex;flex-direction:column;gap:8px}
+.ai{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;
+  border:1px solid var(--border);border-radius:10px;
+  cursor:pointer;transition:border-color .13s,background .13s;background:var(--card)}
+.ai:hover{border-color:rgba(58,155,63,.35);background:rgba(58,155,63,.05)}
+.ai.sel{border-color:var(--accent);background:rgba(58,155,63,.09)}
+.ai.locked{pointer-events:none}
+.ai.locked:not(.sel){opacity:.45}
+.aletter{font-size:9px;font-weight:900;color:var(--al);min-width:15px;padding-top:3px;flex-shrink:0;letter-spacing:.05em}
+.atext{font-size:14px;line-height:1.5}
+
+/* ── select ── */
+.rsel{width:100%;padding:13px 16px;font-size:15px;
+  border:1px solid var(--border);border-radius:10px;
+  color:var(--text);background:var(--bg2);font-family:inherit;cursor:pointer;margin-bottom:12px}
+.rsel:focus{outline:none;border-color:rgba(58,155,63,.5)}
+.rsel option{background:#1a2a38}
+.rhint{font-size:13px;color:var(--muted);line-height:1.7;
+  padding:11px 15px;background:var(--card);border-radius:8px;
+  border-left:3px solid var(--accent);margin-bottom:18px;display:none}
+.rhint.show{display:block}
+
+/* ── analysis panel ── */
+#apanel{position:fixed;bottom:0;left:0;right:0;
+  background:var(--bg2);border-top:1px solid rgba(58,155,63,.18);
+  padding:18px 32px 24px;
+  transform:translateY(100%);transition:transform .3s ease;z-index:200}
+#apanel.show{transform:translateY(0)}
+.aplbl{font-size:8px;font-weight:800;letter-spacing:.25em;color:var(--al);
+  text-transform:uppercase;margin-bottom:7px}
+.aptext{font-size:14px;color:var(--muted);line-height:1.7;max-width:580px;margin-bottom:12px}
+.apnext{display:inline-flex;align-items:center;gap:7px;font-size:14px;
+  font-weight:700;color:var(--text);cursor:pointer;border:none;background:none;
+  padding:0;transition:gap .15s}
+.apnext:hover{gap:11px}
+
+/* ── inter ── */
+.inter-inner{flex:1;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;text-align:center;padding:40px}
+.inter-done{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--al);margin-bottom:14px}
+.inter-h{font-size:clamp(19px,3.2vw,30px);font-weight:900;line-height:1.25;margin-bottom:8px}
+.inter-sub{font-size:clamp(18px,2.8vw,26px);font-weight:800;color:#6BBF6B;margin-bottom:34px}
+.inter-go{font-size:13px;color:var(--dim);cursor:pointer;border:none;background:none;letter-spacing:.05em}
+.inter-go:hover{color:var(--text)}
+.inter-dots{display:flex;gap:8px;justify-content:center;margin-bottom:28px}
+.idot{width:8px;height:8px;border-radius:50%;background:var(--dim)}
+.idot.active{background:var(--accent)}
+
+/* ── result ── */
+#s-result{overflow-y:auto}
+.res-wrap{max-width:720px;margin:0 auto;padding:36px 32px 56px;width:100%}
+.res-top{display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.res-brand{font-size:9px;font-weight:800;letter-spacing:.15em;color:var(--al)}
+.res-date{font-size:11px;color:var(--dim)}
+.badge{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.1em;
+  color:#fff;background:var(--accent);padding:4px 13px;border-radius:20px;
+  text-transform:uppercase;margin-bottom:10px}
+.res-h{font-size:clamp(19px,3.2vw,32px);font-weight:900;line-height:1.2;
+  color:#6BBF6B;margin-bottom:12px}
+.res-sub{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:28px;
+  padding-bottom:24px;border-bottom:1px solid var(--border)}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+@media(max-width:520px){.three{grid-template-columns:1fr}}
+.pcard{padding:14px;background:var(--card);border:1px solid var(--border);border-radius:10px}
+.pc-lbl{font-size:8px;font-weight:800;letter-spacing:.18em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:7px}
+.pc-val{font-size:17px;font-weight:800;color:#6BBF6B;margin-bottom:3px;line-height:1.1}
+.pc-sub{font-size:11px;color:var(--muted);line-height:1.5}
+.sc-block{margin-bottom:24px}
+.sc-hdr{font-size:8px;font-weight:800;letter-spacing:.18em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:14px}
+.sc-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.sc-nm{font-size:12px;color:var(--muted);min-width:160px}
+.sc-bg{flex:1;height:4px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.sc-fill{height:100%;background:var(--accent);width:0;
+  transition:width 1.4s cubic-bezier(.16,1,.3,1);border-radius:3px}
+.sc-pct{font-size:11px;font-weight:800;color:#7FC87F;min-width:34px;text-align:right}
+.income{background:rgba(58,155,63,.08);border:1px solid rgba(58,155,63,.25);
+  border-radius:12px;padding:18px 20px;margin-bottom:22px}
+.inc-lbl{font-size:8px;font-weight:800;letter-spacing:.2em;color:var(--al);
+  text-transform:uppercase;margin-bottom:6px}
+.inc-num{font-size:clamp(20px,3.2vw,30px);font-weight:900;color:#6BBF6B;
+  margin-bottom:4px;line-height:1.1}
+.inc-sub{font-size:13px;color:var(--muted);line-height:1.55}
+.rcard{border:1px solid rgba(58,155,63,.18);border-radius:12px;padding:18px 20px;margin-bottom:22px}
+.rcard-title{font-size:9px;font-weight:800;letter-spacing:.14em;color:#7FC87F;
+  text-transform:uppercase;margin-bottom:14px}
+.rrow{display:flex;justify-content:space-between;padding:7px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);gap:10px}
+.rrow:last-of-type{border:none}
+.rk{font-size:13px;color:var(--muted);flex:0 0 44%}
+.rv{font-size:13px;color:var(--text);font-weight:600;text-align:right;flex:0 0 54%}
+.rnote{font-size:13px;color:var(--muted);line-height:1.65;margin-top:12px;
+  padding-top:12px;border-top:1px solid rgba(255,255,255,.04);font-style:italic}
+.reco{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px 20px;margin-bottom:20px}
+.reco-lbl{font-size:8px;font-weight:800;letter-spacing:.2em;color:#7FC87F;
+  text-transform:uppercase;margin-bottom:7px}
+.reco-txt{font-size:14px;color:var(--muted);line-height:1.7}
+.reco-txt strong{color:var(--text)}
+.exit{background:var(--aglow);border:1px solid rgba(58,155,63,.25);
+  border-radius:12px;padding:16px 20px;margin-bottom:32px}
+.exit-lbl{font-size:8px;font-weight:800;letter-spacing:.2em;color:#7FC87F;
+  text-transform:uppercase;margin-bottom:6px}
+.exit-txt{font-size:15px;font-weight:700;color:var(--text);line-height:1.5}
+
+/* ── CTA ── */
+.cta-wrap{border-top:1px solid var(--border);padding:36px 32px 56px;
+  max-width:720px;margin:0 auto;width:100%;text-align:center}
+.cta-h{font-size:clamp(17px,2.6vw,22px);font-weight:900;line-height:1.3;margin-bottom:10px}
+.cta-sub{font-size:14px;color:var(--muted);line-height:1.75;max-width:420px;margin:0 auto 22px}
+
+/* лид-магнит превью */
+.lm-card{background:var(--card);border:1px solid rgba(58,155,63,.2);border-radius:14px;
+  padding:18px 20px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;text-align:left}
+.lm-ico{font-size:28px;flex-shrink:0;margin-top:2px}
+.lm-title{font-size:14px;font-weight:800;color:#6BBF6B;margin-bottom:4px}
+.lm-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.lm-items{margin-top:8px;display:flex;flex-direction:column;gap:4px}
+.lm-item{font-size:12px;color:var(--muted);display:flex;gap:6px}
+.lm-item::before{content:"→";color:var(--accent);flex-shrink:0}
+
+.ci{width:100%;padding:13px 15px;font-size:15px;border:1px solid var(--border);
+  border-radius:8px;color:var(--text);background:var(--bg2);font-family:inherit;margin-bottom:9px}
+.ci:focus{outline:none;border-color:rgba(58,155,63,.45)}
+.hint{font-size:12px;color:var(--dim);margin-top:6px;line-height:1.5}
+.restart{display:block;margin:16px auto 0;font-size:13px;color:var(--dim);
+  cursor:pointer;border:none;background:none;transition:color .15s}
+.restart:hover{color:var(--text)}
+
+@media(max-width:600px){
+  .wrap,.res-wrap,.cta-wrap{padding-left:18px;padding-right:18px}
+  .hdr{padding:14px 18px}
+  #apanel{padding:14px 18px 20px}
+  .sc-nm{min-width:110px;font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<div id="s-start" class="screen show">
+  <div class="wrap" style="justify-content:center">
+    <div class="pill"><b>ДИАГНОСТИКА</b> · 13 ВОПРОСОВ · 5–7 МИН</div>
+    <h1 class="h1">Готов ли ваш регион<br>к технадзору ИЖС —<br><em>и готовы ли вы?</em></h1>
+    <p class="hdesc">Не тест на нормативы. <strong>Реальная оценка</strong> рынка вашего региона, вашего опыта и главного барьера. В конце — расчёт дохода и <strong>PDF-отчёт по рынку</strong>.</p>
+    <button class="btn" id="btn-start">Начать диагностику &nbsp;→</button>
+    <div class="start-meta">
+      <div class="sm"><div class="sdot"></div>84 РЕГИОНА В БАЗЕ</div>
+      <div class="sm"><div class="sdot"></div>РАСЧЁТ ДОХОДА</div>
+      <div class="sm"><div class="sdot"></div>PDF-ОТЧЁТ В КОНЦЕ</div>
+    </div>
+  </div>
+</div>
+
+<!-- RULES -->
+<div id="s-rules" class="screen">
+  <div class="wrap">
+    <div class="rlbl">Прежде чем начать</div>
+    <h2 class="rtitle">Как работает<br><em>эта диагностика</em></h2>
+    <div class="rules">
+      <div class="rule"><div class="rn">1</div><div class="rt"><strong>Три блока:</strong> рынок вашего региона, ваш потенциал, барьеры и готовность. Между блоками — короткая пауза с промежуточным результатом.</div></div>
+      <div class="rule"><div class="rn">2</div><div class="rt">После каждого ответа — <strong>аналитический комментарий</strong>: что именно этот ответ говорит о рынке и вашей ситуации.</div></div>
+      <div class="rule"><div class="rn">3</div><div class="rt"><strong>Отвечайте честно.</strong> Нет правильных ответов — есть точные. Чем честнее, тем точнее результат и рекомендации.</div></div>
+      <div class="rule"><div class="rn">4</div><div class="rt">В конце: <strong>тип стартовой ситуации, расчёт дохода, карта рынка</strong> и PDF-отчёт с данными по вашему региону.</div></div>
+    </div>
+    <button class="btn" id="btn-rules">Начать &nbsp;→</button>
+  </div>
+</div>
+
+<!-- REGION -->
+<div id="s-region" class="screen">
+  <div class="hdr">
+    <div class="brand">Технадзор ИЖС</div>
+    <div class="prog">
+      <div class="block-badge">Блок 1</div>
+      <div class="prog-label">Регион</div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="qlbl">Отправная точка · шаг 1 из 13</div>
+    <div class="qtitle">В каком регионе России вы работаете или планируете работать?</div>
+    <select id="rsel" class="rsel"><option value="" disabled selected>— выберите регион —</option></select>
+    <div id="rhint" class="rhint"></div>
+    <button class="btn" id="btn-region" style="margin-top:8px">Далее &nbsp;→</button>
+  </div>
+</div>
+
+<!-- QUESTION -->
+<div id="s-q" class="screen">
+  <div class="hdr">
+    <div class="brand">Технадзор ИЖС</div>
+    <div class="prog" id="hdr-prog">
+      <div class="block-badge" id="blk-badge">Блок 1</div>
+      <div class="prog-label"><b id="q-cur">1</b> / 13</div>
+      <div class="pbar-bg"><div class="pbar-fill" id="pbar"></div></div>
+    </div>
+  </div>
+  <div class="wrap" id="qwrap"></div>
+</div>
+
+<!-- INTER 1 -->
+<div id="s-inter1" class="screen">
+  <div class="inter-inner">
+    <div class="inter-dots"><div class="idot active"></div><div class="idot"></div><div class="idot"></div></div>
+    <div class="inter-done">Блок 1 завершён · Рынок региона</div>
+    <div class="inter-h"><span id="int1-score" style="color:var(--al)"></span></div>
+    <div class="inter-sub">Теперь — ваш потенциал</div>
+    <button class="inter-go" id="btn-inter1">Продолжить &nbsp;→</button>
+  </div>
+</div>
+
+<!-- INTER 2 -->
+<div id="s-inter2" class="screen">
+  <div class="inter-inner">
+    <div class="inter-dots"><div class="idot active"></div><div class="idot active"></div><div class="idot"></div></div>
+    <div class="inter-done">Блок 2 завершён · Ваш потенциал</div>
+    <div class="inter-h"><span id="int2-score" style="color:var(--al)"></span></div>
+    <div class="inter-sub">Последний блок — барьеры и старт</div>
+    <button class="inter-go" id="btn-inter2">Завершить диагностику &nbsp;→</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="s-result" class="screen">
+  <div class="res-wrap" id="res-inner"></div>
+  <div class="cta-wrap" id="cta"></div>
+</div>
+
+<!-- APANEL -->
+<div id="apanel">
+  <div class="aplbl">Аналитика · этот ответ</div>
+  <div class="aptext" id="aptext"></div>
+  <button class="apnext" id="btn-apnext">Следующий вопрос &nbsp;→</button>
+</div>
+
+<script>
+// ═══════════════════════════════
+//  ДАННЫЕ РЕГИОНОВ
+// ═══════════════════════════════
+var REGIONS = {
+  "Московская область":      {t:"зрелый",p:3,vol:"~40 000 домов/год",dyn:"+8% к 2023",price:"9–15 млн руб.",mort:"Активно (Сбер, ВТБ, ДОМ.РФ)",comp:"Высокая",tn:"25 000–60 000 руб./выезд",hint:"🔴 Зрелый рынок · Крупнейший рынок ИЖС в России. Конкурентный, но самый ёмкий.",note:"Важна специализация: коттеджные посёлки и бюджетное ИЖС — разные клиенты."},
+  "Краснодарский край":      {t:"зрелый",p:3,vol:"~35 000 домов/год",dyn:"+12% к 2023",price:"7–12 млн руб.",mort:"Очень активно, лидер",comp:"Средняя",tn:"15 000–40 000 руб./выезд",hint:"🔴 Зрелый рынок · Второй по объёму ИЖС регион. Высокий миграционный прирост.",note:"Активны Краснодар, Анапа, Новороссийск. Рынок растёт быстрее числа специалистов."},
+  "Ленинградская область":   {t:"зрелый",p:3,vol:"~18 000 домов/год",dyn:"+9% к 2023",price:"10–14 млн руб.",mort:"Активно",comp:"Средняя",tn:"20 000–50 000 руб./выезд",hint:"🔴 Зрелый рынок · Один из самых дорогих рынков. Средняя стоимость дома — в топ-3.",note:"Спрос в поясе вокруг Петербурга. Заказчики платёжеспособные, требования высокие."},
+  "Республика Татарстан":    {t:"зрелый",p:3,vol:"~22 000 домов/год",dyn:"+11% к 2023",price:"6–9 млн руб.",mort:"Лидер по ипотеке ИЖС в ПФО",comp:"Средняя",tn:"12 000–30 000 руб./выезд",hint:"🔴 Зрелый рынок · Один из самых организованных рынков ИЖС в Поволжье.",note:"Казань и пригороды. Банки активны, культура проектного подхода высокая."},
+  "Тюменская область":       {t:"зрелый",p:3,vol:"~16 000 домов/год",dyn:"+14% к 2023",price:"7–11 млн руб.",mort:"Активно (ДОМ.РФ)",comp:"Невысокая",tn:"15 000–35 000 руб./выезд",hint:"🔴 Зрелый рынок · Большой объём, платёжеспособная аудитория, конкуренции мало.",note:"Один из лучших регионов для входа в технадзор ИЖС."},
+  "Ростовская область":      {t:"зрелый",p:3,vol:"~20 000 домов/год",dyn:"+10% к 2023",price:"5,5–8 млн руб.",mort:"Средняя активность",comp:"Средняя",tn:"10 000–25 000 руб./выезд",hint:"🔴 Зрелый рынок · Традиционно сильный рынок частного домостроения на юге.",note:"Хорошо работают специалисты со знанием местной строительной специфики."},
+  "Воронежская область":     {t:"зрелый",p:3,vol:"~14 000 домов/год",dyn:"+13% к 2023",price:"4,5–7 млн руб.",mort:"Умеренно",comp:"Невысокая",tn:"8 000–20 000 руб./выезд",hint:"🔴 Зрелый рынок · Растущий пригородный рынок ЦФО. Специалистов мало.",note:"Хорошая возможность занять место до прихода конкурентов из Москвы."},
+  "Нижегородская область":   {t:"зрелый",p:3,vol:"~13 000 домов/год",dyn:"+10% к 2023",price:"5–8 млн руб.",mort:"Средняя активность",comp:"Невысокая",tn:"10 000–25 000 руб./выезд",hint:"🔴 Зрелый рынок · Технический город с высокой строительной культурой.",note:"Грамотные заказчики хорошо воспринимают специалиста, умеющего объяснять."},
+  "Свердловская область":    {t:"зрелый",p:3,vol:"~15 000 домов/год",dyn:"+11% к 2023",price:"6–9 млн руб.",mort:"Активно",comp:"Средняя",tn:"12 000–28 000 руб./выезд",hint:"🔴 Зрелый рынок · Третий строительный рынок России по объёму.",note:"Пригороды Екатеринбурга активно застраиваются."},
+  "Новосибирская область":   {t:"зрелый",p:3,vol:"~14 000 домов/год",dyn:"+13% к 2023",price:"5,5–8 млн руб.",mort:"Активно",comp:"Средняя",tn:"10 000–24 000 руб./выезд",hint:"🔴 Зрелый рынок · Столица Сибири с высокой деловой активностью.",note:"Устойчивый рынок, цивилизованные заказчики."},
+  "Белгородская область":    {t:"зрелый",p:3,vol:"~12 000 домов/год",dyn:"+7% к 2023",price:"4,5–7 млн руб.",mort:"Умеренно",comp:"Средняя",tn:"8 000–20 000 руб./выезд",hint:"🔴 Зрелый рынок · Традиционно высокая доля ИЖС в регионе.",note:"Устойчивый рынок с постоянным спросом."},
+  "Челябинская область":     {t:"зрелый",p:3,vol:"~13 000 домов/год",dyn:"+9% к 2023",price:"5–8 млн руб.",mort:"Активно",comp:"Средняя",tn:"10 000–22 000 руб./выезд",hint:"🔴 Зрелый рынок · Промышленный регион с активным пригородным строительством.",note:"Рынок стабильный. Заказчики ценят опыт и конкретику."},
+  "Республика Дагестан":     {t:"растущий",p:2,vol:"~18 000 домов/год",dyn:"🔥 +120% к 2023",price:"3,5–6 млн руб.",mort:"Начинает развиваться",comp:"Очень низкая",tn:"5 000–15 000 руб./выезд",hint:"🟡 Рынок в росте · Самый быстрорастущий рынок ИЖС в России. Объём удвоился за год.",note:"Профессионального технадзора почти нет. Первый — работает без конкурентов годами."},
+  "Тверская область":        {t:"растущий",p:2,vol:"~9 000 домов/год",dyn:"+19% к 2023",price:"4–6 млн руб.",mort:"Умеренно, растёт",comp:"Очень низкая",tn:"7 000–18 000 руб./выезд",hint:"🟡 Рынок в росте · Близость к Москве привлекает покупателей с московским бюджетом.",note:"Цены на услуги ещё не задраны — хороший старт без давления мегаполиса."},
+  "Иркутская область":       {t:"растущий",p:2,vol:"~10 000 домов/год",dyn:"+18% к 2023",price:"5–7,5 млн руб.",mort:"Начинает развиваться",comp:"Очень низкая",tn:"8 000–18 000 руб./выезд",hint:"🟡 Рынок в росте · Крупнейший город Восточной Сибири с растущим рынком.",note:"Специфика: деревянное домостроение, сейсмика, сложные грунты."},
+  "Республика Башкортостан": {t:"растущий",p:2,vol:"~19 000 домов/год",dyn:"+15% к 2023",price:"4,5–7 млн руб.",mort:"Активно (ДОМ.РФ)",comp:"Невысокая",tn:"8 000–20 000 руб./выезд",hint:"🟡 Рынок в росте · Топ-5 по объёму ИЖС в Поволжье.",note:"Культура найма технадзора только формируется — специалист с позиционированием нужен."},
+  "Красноярский край":       {t:"растущий",p:2,vol:"~12 000 домов/год",dyn:"+16% к 2023",price:"5,5–8,5 млн руб.",mort:"Растёт",comp:"Низкая",tn:"10 000–22 000 руб./выезд",hint:"🟡 Рынок в росте · Растущий рынок с низкой конкуренцией.",note:"Сибирская специфика: сложные грунты, утепление, деревянные конструкции."},
+  "Самарская область":       {t:"растущий",p:2,vol:"~13 000 домов/год",dyn:"+18% к 2023",price:"5–8 млн руб.",mort:"Активно",comp:"Невысокая",tn:"9 000–22 000 руб./выезд",hint:"🟡 Рынок в росте · Лидер по темпу роста ИЖС в 2024–2025.",note:"Хороший момент для входа до усиления конкуренции."},
+  "Ставропольский край":     {t:"растущий",p:2,vol:"~11 000 домов/год",dyn:"+14% к 2023",price:"4–7 млн руб.",mort:"Умеренно",comp:"Низкая",tn:"7 000–18 000 руб./выезд",hint:"🟡 Рынок в росте · Курортный регион с растущим строительством.",note:"Активны Ставрополь, Пятигорск, Ессентуки."},
+  "Пермский край":           {t:"растущий",p:2,vol:"~10 000 домов/год",dyn:"+13% к 2023",price:"5–7,5 млн руб.",mort:"Умеренно",comp:"Низкая",tn:"8 000–20 000 руб./выезд",hint:"🟡 Рынок в росте · Промышленный регион с растущим пригородом.",note:"Заказчики технически грамотные — ценят конкретику."},
+  "Омская область":          {t:"растущий",p:2,vol:"~9 000 домов/год",dyn:"+14% к 2023",price:"4,5–7 млн руб.",mort:"Умеренно",comp:"Низкая",tn:"7 000–17 000 руб./выезд",hint:"🟡 Рынок в росте · Рынок в стадии роста. Конкуренции мало.",note:"Хорошая точка для раннего входа."}
+};
+
+var TMPL = {
+  зрелый:   {t:"зрелый",p:3,vol:"от 10 000 домов/год",dyn:"+8–14%",price:"5–9 млн руб.",mort:"Активно",comp:"Средняя",tn:"10 000–28 000 руб./выезд",hint:"🔴 Зрелый рынок · Стабильный объём и сформировавшийся спрос на профессиональный контроль.",note:"Стабильный объём. Конкуренция есть, но рынок достаточно большой для нескольких специалистов."},
+  растущий: {t:"растущий",p:2,vol:"от 5 000 домов/год",dyn:"+13–20%",price:"4–7 млн руб.",mort:"Развивается",comp:"Низкая",tn:"7 000–20 000 руб./выезд",hint:"🟡 Рынок в росте · Конкуренции мало — кто выходит сейчас, работает без конкурентов через год.",note:"Тот, кто занимает место сейчас, через год работает без конкурентов."},
+  точечный: {t:"точечный",p:1,vol:"от 1 000 домов/год",dyn:"формируется",price:"3–6 млн руб.",mort:"Начинается",comp:"Очень низкая",tn:"5 000–14 000 руб./выезд",hint:"🔵 Точечный рынок · Рынок только формируется. Первый — получает нишу надолго.",note:"Рынок только формируется. Первый публичный специалист получает нишу без борьбы."}
+};
+
+var ALL_REGIONS = ["Республика Адыгея","Республика Алтай","Республика Башкортостан","Республика Бурятия","Республика Дагестан","Республика Ингушетия","Кабардино-Балкарская Республика","Республика Калмыкия","Карачаево-Черкесская Республика","Республика Карелия","Республика Коми","Республика Крым","Республика Марий Эл","Республика Мордовия","Республика Саха (Якутия)","Республика Северная Осетия — Алания","Республика Татарстан","Республика Тыва","Удмуртская Республика","Республика Хакасия","Чеченская Республика","Чувашская Республика","Алтайский край","Забайкальский край","Камчатский край","Краснодарский край","Красноярский край","Пермский край","Приморский край","Ставропольский край","Хабаровский край","Амурская область","Архангельская область","Астраханская область","Белгородская область","Брянская область","Владимирская область","Волгоградская область","Вологодская область","Воронежская область","Ивановская область","Иркутская область","Калининградская область","Калужская область","Кемеровская область","Кировская область","Костромская область","Курганская область","Курская область","Ленинградская область","Липецкая область","Магаданская область","Московская область","Мурманская область","Нижегородская область","Новгородская область","Новосибирская область","Омская область","Оренбургская область","Орловская область","Пензенская область","Псковская область","Ростовская область","Рязанская область","Самарская область","Саратовская область","Сахалинская область","Свердловская область","Смоленская область","Тамбовская область","Тверская область","Томская область","Тульская область","Тюменская область","Ульяновская область","Челябинская область","Ярославская область","Москва","Санкт-Петербург","Севастополь","Еврейская автономная область","Ненецкий АО","Ханты-Мансийский АО — Югра","Чукотский АО","Ямало-Ненецкий АО"];
+
+function getRD(name) {
+  if (REGIONS[name]) return REGIONS[name];
+  var dfo = ["Бурятия","Якутия","Камчатский","Приморский","Хабаровский","Амурская","Сахалинская","Магаданская","Еврейская","Чукотский","Ненецкий","Ямало","Ханты"];
+  var small = ["Тыва","Ингушетия","Калмыкия","Карачаево","Кабардино","Осетия","Крым","Севастополь","Псковская","Костромская","Новгородская","Курганская","Орловская","Ивановская","Вологодская"];
+  if (dfo.some(function(x){return name.indexOf(x)>=0;})) return TMPL.точечный;
+  if (small.some(function(x){return name.indexOf(x)>=0;})) return TMPL.точечный;
+  var big = ["Белгородская","Воронежская","Нижегородская","Свердловская","Новосибирская","Ростовская","Тюменская","Ленинградская","Краснодарский","Московская","Татарстан","Челябинская","Волгоградская","Москва","Санкт-Петербург","Ханты","Ямало"];
+  if (big.some(function(x){return name.indexOf(x)>=0;})) return TMPL.зрелый;
+  return TMPL.растущий;
+}
+
+// ═══════════════════════════════
+//  ВОПРОСЫ (13)
+// ═══════════════════════════════
+var QS = [
+// БЛОК 1 — Рынок (Q0-Q4, индексы 0-4)
+{id:1,blk:1,lbl:"01 · Рынок региона",q:"Как вы оцениваете темп строительства частных домов в вашем регионе за последние 2 года?",
+ ans:[
+  {l:"А",t:"Стройки везде — народ активно строится",p:3,a:"Хороший сигнал. Высокий видимый темп строительства — главный индикатор спроса на технадзор. Рынок уже «горячий»."},
+  {l:"Б",t:"Заметно больше, чем раньше",p:2,a:"Рост важнее, чем абсолютный объём. Рынок в стадии роста — лучший момент для входа: спрос формируется, конкуренция ещё невысокая."},
+  {l:"В",t:"Примерно как всегда",p:1,a:"Стабильный рынок тоже работает. При постоянном объёме строительства есть постоянный спрос на контроль."},
+  {l:"Г",t:"Скорее меньше или стагнация",p:0,a:"Честная оценка. Это означает другую стратегию: работа с банками, застройщиками, подрядчиками. Розничный поток медленнее, но есть."}
+ ]},
+{id:2,blk:1,lbl:"02 · Кто строит",q:"Кто в основном строит частные дома в вашем регионе?",
+ ans:[
+  {l:"А",t:"Частники сами строят, нанимая бригады",p:3,a:"Это ваш главный клиент. Именно такой заказчик — без профессиональной помощи, с бригадой «по знакомству» — и несёт самые большие риски и самые большие потери от отсутствия контроля."},
+  {l:"Б",t:"Много коттеджных посёлков с единым подрядчиком",p:2,a:"В коттеджных посёлках есть и B2B-клиент (застройщик посёлка), и частный покупатель. Оба могут платить за технадзор, но с разной мотивацией."},
+  {l:"В",t:"Строят крупные подрядчики / домостроительные компании",p:1,a:"В этом случае ваши клиенты — покупатели домов (технадзор за готовым строительством) и банки (контроль при ипотечных сделках)."},
+  {l:"Г",t:"Затрудняюсь ответить / не слежу",p:0,a:"Незнание структуры рынка — один из первых пробелов. Хорошая новость: это закрывается за один день мониторинга Авито и Профи.ру в вашем регионе."}
+ ]},
+{id:3,blk:1,lbl:"03 · Эскроу и ипотека",q:"Банки в вашем регионе выдают ипотеку на строительство дома через эскроу-счёт?",
+ ans:[
+  {l:"А",t:"Да, такие сделки уже идут — видел(а) сам(а)",p:3,a:"Отличный знак. Эскроу в ИЖС — это системный спрос на технадзор: банк держит деньги и требует контроль на каждом этапе. Попасть в реестр банка — и поток клиентов становится устойчивым."},
+  {l:"Б",t:"Слышал(а), что есть — но в практике почти не встречал(а)",p:2,a:"Рынок только разворачивается в вашем регионе. С марта 2025 года механизм обязателен при ипотечном строительстве — поток будет расти. Сейчас момент занять место."},
+  {l:"В",t:"Не встречал(а) / не знаю",p:0,a:"Возможно, рынок ещё не дошёл до вашего региона. Но это не означает отсутствия спроса. Розничный частный заказчик работает везде, где есть строительство."}
+ ]},
+{id:4,blk:1,lbl:"04 · Конкуренты",q:"Есть ли в вашем регионе специалисты или компании, которые предлагают технадзор для частных домов?",
+ ans:[
+  {l:"А",t:"Да, их несколько — конкуренция заметна",p:1,a:"Конкуренция означает, что рынок есть. Важнее — чем вы отличаетесь. Специализация, методика, умение объяснять цену — вот что создаёт очередь даже в конкурентной среде."},
+  {l:"Б",t:"Единицы — практически нет",p:3,a:"Золотое окно. Спрос появился раньше, чем предложение. Такие рынки — самые удобные для быстрого старта и формирования репутации первопроходца."},
+  {l:"В",t:"Не встречал(а) вообще",p:3,a:"Рынок существует неформально или специалисты не умеют продвигаться. В обоих случаях — возможность: первый публичный специалист получает рынок без конкуренции."},
+  {l:"Г",t:"Не изучал(а) — не знаю",p:1,a:"Если специалисты есть, но их не видно — значит, они не умеют продвигаться. Это ваше преимущество, если вы научитесь делать это правильно."}
+ ]},
+{id:5,blk:1,lbl:"05 · Опыт соседей",q:"Встречали ли вы людей, у которых что-то пошло не так при строительстве дома: бракованная работа, споры с подрядчиком, переделки?",
+ ans:[
+  {l:"А",t:"Да, и не раз — это частая история",p:3,a:"Именно это и есть спрос на технадзор — только неосознанный. Человек не знает, что называется «технадзор», но знает, что хочет, чтобы такого у него не было. Ваша задача — перевести его боль в конкретную услугу."},
+  {l:"Б",t:"Знаю пару случаев",p:2,a:"Каждый такой случай — это потенциальный клиент, который в следующий раз заплатит за контроль. Умение рассказывать такие истории в маркетинге — один из самых сильных инструментов в нише."},
+  {l:"В",t:"Лично не встречал(а), но слышал(а)",p:1,a:"Строительный брак в ИЖС — систематическая проблема. По данным судебной практики, большинство споров касается именно частного строительства без профессионального контроля."},
+  {l:"Г",t:"Нет, у всех всё нормально",p:0,a:"Редкая ситуация. Возможно, в вашем окружении высокая культура найма подрядчиков — или вы ещё не слышали историй. Рыночная статистика говорит о другом: дефекты есть на большинстве объектов ИЖС."}
+ ]},
+
+// БЛОК 2 — Потенциал (Q5-Q9, индексы 5-9)
+{id:6,blk:2,lbl:"06 · Ваш опыт",q:"Какой у вас строительный или смежный опыт?",
+ ans:[
+  {l:"А",t:"Прораб, мастер, начальник участка",p:4,a:"Лучший бэкграунд для технадзорщика ИЖС. Вы видите нарушение на три шага раньше, чем оно произошло. Заказчики это чувствуют — и именно за это готовы платить."},
+  {l:"Б",t:"Проектировщик, конструктор, архитектор",p:4,a:"Отличная база. Проектировщик читает чертёж и сразу видит несоответствие на объекте. Это именно то, чего не хватает большинству заказчиков."},
+  {l:"В",t:"Инженер ПТО, сметчик, технолог",p:3,a:"Хорошая основа. Понимание документации и стоимости работ — большое преимущество при составлении заключений и в переговорах с заказчиком."},
+  {l:"Г",t:"Электрика, сантехника или другая смежная",p:2,a:"Смежный опыт ценный. У вас есть понимание инженерных систем, которого нет у большинства «общих» технадзорщиков. Хорошая ниша внутри ниши."},
+  {l:"Д",t:"Опыта в стройке пока нет",p:0,a:"Честный ответ. Начинать без опыта сложнее. Методика + наставничество + первые объекты рядом с более опытным специалистом — рабочий путь, но более долгий."}
+ ]},
+{id:7,blk:2,lbl:"07 · Стаж",q:"Как давно вы работаете в строительстве или смежной сфере?",
+ ans:[
+  {l:"А",t:"Более 10 лет",p:4,a:"Серьёзный стаж — это доверие заказчика ещё до первого разговора. На рынке, где все специалисты «опытные», 10+ лет — это уже позиция эксперта."},
+  {l:"Б",t:"5–10 лет",p:3,a:"Оптимальный диапазон для старта в технадзоре. Достаточно опыта, чтобы уверенно работать на объекте, и достаточно энергии, чтобы строить практику с нуля."},
+  {l:"В",t:"2–5 лет",p:2,a:"Хорошая база. В этом диапазоне важно выбрать узкую специализацию — например, монолитные конструкции или деревянное домостроение — чтобы быстро набрать экспертизу в конкретной нише."},
+  {l:"Г",t:"До 2 лет",p:1,a:"Ранний старт. Технадзор — не первый шаг; сначала нужно накопить практику на объектах. Параллельно — методика, чтобы знать, что именно смотреть."},
+  {l:"Д",t:"Ещё не работал(а) в строительстве",p:0,a:"Старт с нуля — долгий, но возможный путь. Лучшая стратегия: найти партнёра с опытом на первые объекты и сосредоточиться на маркетинге и клиентском сервисе."}
+ ]},
+{id:8,blk:2,lbl:"08 · Документы",q:"Есть ли у вас строительное образование или документы: диплом, удостоверения, сертификаты?",
+ ans:[
+  {l:"А",t:"Высшее строительное образование",p:3,a:"Диплом строительного вуза — сильный аргумент при первом контакте с банком или крупным заказчиком. Особенно в сочетании с новым профстандартом, действующим с 01.03.2026."},
+  {l:"Б",t:"Среднее специальное / колледж",p:2,a:"Диплом колледжа + практический опыт — вполне достаточная связка для большинства заказчиков ИЖС. Частник нанимает того, кому доверяет, а не того, у кого лучше бумаги."},
+  {l:"В",t:"Курсы, удостоверения, сертификаты",p:2,a:"Документы о повышении квалификации работают как социальное доказательство. Главное — уметь их правильно презентовать: не «у меня есть диплом», а «я специализируюсь на ИЖС и прошёл обучение именно по этому направлению»."},
+  {l:"Г",t:"Документов пока нет",p:0,a:"На практике заказчик ИЖС нанимает по рекомендации, кейсам и первому впечатлению. Документы помогают, но не являются обязательным условием для первых заказов."}
+ ]},
+{id:9,blk:2,lbl:"09 · Доход сейчас",q:"Сколько вы зарабатываете сейчас в месяц?",
+ ans:[
+  {l:"А",t:"До 60 000 руб.",p:0,a:"Переход в технадзор — это потенциально 2–3× к текущему доходу. При двух объектах по 80 000 руб. — это 160 000 руб. уже в первые месяцы при правильном старте."},
+  {l:"Б",t:"60 000–100 000 руб.",p:1,a:"Технадзор при правильной загрузке — 150 000–250 000 руб./мес. Конкретно: 2 объекта по 80 000 + 1 разовый выезд. Достижимо через 2–4 месяца."},
+  {l:"В",t:"100 000–150 000 руб.",p:2,a:"Вы уже на уровне среднего специалиста. Технадзор — переход в диапазон 200 000–300 000 руб. Разница только в системе, а не в компетенции."},
+  {l:"Г",t:"От 150 000 руб.",p:3,a:"Вы понимаете ценность своего времени. При 3–5 объектах одновременно — 300 000–500 000 руб. реально. Технадзор для вас — диверсификация или практика без потолка."}
+ ]},
+{id:10,blk:2,lbl:"10 · Каналы клиентов",q:"Как вы сейчас привлекаете заказчиков — или как планируете?",
+ ans:[
+  {l:"А",t:"Сарафанное радио, знакомые",p:1,a:"Работает, но медленно. Сарафан даёт первых 2–3 клиентов — и часто на этом останавливается. Нужен хотя бы один дополнительный канал для стабильной загрузки."},
+  {l:"Б",t:"Авито, Профи.ру, Яндекс.Услуги",p:2,a:"Хороший выбор для старта. Авито в нише технадзора ИЖС даёт заявки уже в первую неделю при правильно оформленном объявлении — без рекламного бюджета."},
+  {l:"В",t:"Соцсети или Telegram-канал",p:3,a:"Самый масштабируемый канал. Специалисты с активным Telegram или соцсетями выходят на загрузку 4–6 объектов вдвое быстрее. Контент работает за вас."},
+  {l:"Г",t:"Пока не думал(а) об этом",p:0,bar:"продажи",a:"Самый распространённый барьер у технических специалистов. Для первых клиентов не нужен бюджет — нужно знать 3–4 конкретных канала. Это обучаемо за один вечер."}
+ ]},
+
+// БЛОК 3 — Барьеры (Q10-Q12, индексы 10-12)
+{id:11,blk:3,lbl:"11 · Главный барьер",q:"Что вас больше всего останавливает прямо сейчас?",
+ ans:[
+  {l:"А",t:"Нет чёткой методики — не знаю, что делать на объекте",p:0,bar:"навыки",a:"Самый честный барьер. Именно он мешает большинству опытных специалистов сделать первый шаг. Хорошая новость: методика — самая «быстрая» часть. Она передаётся за дни, не годы."},
+  {l:"Б",t:"Понимаю профессию, но не знаю, как найти клиентов",p:0,bar:"продажи",a:"Классическая точка застревания для технических специалистов. Продажи здесь — не «убеждать», а объяснять ценность через арифметику. Это тренируется."},
+  {l:"В",t:"Не уверен(а), что в моём регионе это купят",p:0,bar:"рынок",a:"Сомнение в рынке — часто защитная реакция, а не реальная оценка. Посмотрите на данные вашего региона в результате — там конкретные цифры."},
+  {l:"Г",t:"Нет официального статуса — боюсь конкурентов с корочками",p:0,bar:"легитимность",a:"С 1 марта 2026 года действует новый профстандарт специалиста стройконтроля. На практике заказчик платит за доверие, а не за бумагу — особенно в ИЖС."}
+ ]},
+{id:12,blk:3,lbl:"12 · Ваши приоритеты",q:"Что для вас важнее всего при выходе в технадзор?",
+ ans:[
+  {l:"А",t:"Доход — хочу зарабатывать больше",p:2,a:"Доход — честная и рабочая мотивация. Технадзор ИЖС — одна из немногих ниш, где специалист без команды может выйти на 200 000–300 000 руб./мес. Нужна система."},
+  {l:"Б",t:"Независимость — хочу работать на себя",p:2,a:"Технадзор — идеально под это. Вы сами ведёте объекты, сами назначаете цену, сами выбираете клиентов. Это не найм — это практика."},
+  {l:"В",t:"Экспертиза — хочу быть признанным специалистом",p:2,a:"Публичная экспертность в строительном контроле — недооценённый актив. Специалист с Telegram-каналом и несколькими кейсами быстро становится точкой притяжения в регионе."},
+  {l:"Г",t:"Стабильность — хочу предсказуемый поток заказов",p:2,a:"Предсказуемость строится через диверсификацию каналов. Один канал — нестабильность. Три канала (Авито + сарафан + партнёры) — это уже система с предсказуемым потоком."}
+ ]},
+{id:13,blk:3,lbl:"13 · Горизонт старта",q:"Когда вы готовы сделать первый реальный шаг?",
+ ans:[
+  {l:"А",t:"Уже сейчас — жду конкретного плана",p:3,a:"Отлично. Именно такой настрой даёт результат в первые 30 дней. В конце квиза — ваш персональный следующий шаг."},
+  {l:"Б",t:"В течение месяца",p:2,a:"Хороший горизонт. Месяц — достаточно, чтобы разобраться с методикой, настроить первый канал и выйти на первый объект."},
+  {l:"В",t:"Через 2–3 месяца — пока изучаю",p:1,a:"Изучать — правильно. Но есть риск: «изучать» превращается в бесконечный процесс. Полезнее — учиться параллельно с первыми небольшими шагами."},
+  {l:"Г",t:"Пока не знаю — просто смотрю",p:0,a:"Ничего страшного. Квиз уже дал вам данные по рынку региона. Иногда нужно просто увидеть цифры — и решение приходит само."}
+ ]}
+];
+
+// INTER TEXTS
+function getInt1Text(score1) {
+  if (score1 >= 10) return "Рынок вашего региона — активный";
+  if (score1 >= 6)  return "Рынок вашего региона — в росте";
+  return "Рынок формируется";
+}
+function getInt2Text(score2) {
+  if (score2 >= 14) return "Ваш потенциал — высокий";
+  if (score2 >= 8)  return "Ваш потенциал — хороший задел";
+  return "Потенциал есть — нужна система";
+}
+
+// RESULTS (5 типов)
+var RESULTS = [
+  {min:22,badge:"🚀 ГОРЯЧИЙ СТАРТ",
+   title:"Рынок и вы — совпали. Осталось выйти.",
+   sub:"Сочетание вашего опыта и состояния рынка в регионе — один из самых сильных стартов. Объём ИЖС растёт, банки работают с эскроу, конкуренции среди технадзорщиков мало. Специалисты с таким профилем, кто выходит сейчас, через полгода работают с очередью.",
+   r1:"200 000 – 350 000 руб./мес.",r2:"через 2–3 месяца при 2–4 объектах"},
+  {min:16,badge:"⚡ СИЛЬНЫЙ ЗАДЕЛ",
+   title:"Рынок есть, опыт есть. Нужна система.",
+   sub:"Потенциал — и у вас, и у региона — явно есть. Без системы привлечения клиентов и чёткой методики он остаётся потенциалом. Многие технические специалисты застревают именно здесь: всё понятно в теории, непонятно как запустить поток.",
+   r1:"130 000 – 220 000 руб./мес.",r2:"через 3–4 месяца при 1–3 объектах"},
+  {min:10,badge:"🌱 ХОРОШИЙ ВХОД",
+   title:"Вы заходите раньше конкурентов — это плюс.",
+   sub:"В вашем регионе рынок технадзора ИЖС только формируется — или ваша экспертиза ещё накапливается. Тот, кто занимает место сейчас, через год работает без конкурентов. Именно так выглядели Краснодар и Татарстан несколько лет назад.",
+   r1:"80 000 – 140 000 руб./мес.",r2:"в первые месяцы; выход на 200 000+ к концу года"},
+  {min:5, badge:"🗺️ СТАРТ С БАЗЫ",
+   title:"Начало есть. Нужно выстроить фундамент.",
+   sub:"Ваш профиль показывает, что для уверенного входа нужно закрыть несколько базовых пробелов — в опыте, методике или понимании рынка. Это реально сделать за 1–2 месяца с правильной программой.",
+   r1:"50 000 – 100 000 руб./мес.",r2:"на первом этапе, с выходом на 150 000+ через 4–6 месяцев"},
+  {min:0, badge:"📌 ТОЧКА ОТСЧЁТА",
+   title:"Пока не всё ясно — и это нормально.",
+   sub:"Начинать всегда труднее, чем продолжать. Но те, кто начинают осознанно — с пониманием рынка, методики и каналов — строят самые устойчивые практики. Квиз показал, где пробелы. Это уже ценно.",
+   r1:"30 000 – 70 000 руб./мес.",r2:"на старте с ростом через 4–6 месяцев"}
+];
+
+var BARRIER = {
+  навыки:       "<strong>Ваш следующий шаг — методика работы на объекте.</strong> Курс даёт пошаговую систему: что смотреть на каждом этапе, как фиксировать нарушения, как составлять заключения. Первый модуль можно пройти за выходные.",
+  продажи:      "<strong>Ваш следующий шаг — поток клиентов.</strong> В курсе есть блок: первые 3 заказа за 30 дней без рекламного бюджета. Авито, Профи.ру, партнёрства с риелторами и банками — пошагово с шаблонами.",
+  рынок:        "<strong>Данные по вашему региону — в карте рынка ниже.</strong> Если объём ИЖС конкретный — рынок есть. Вопрос не «купят или нет», а «как объяснить ценность». Именно этому посвящён блок по переговорам в курсе.",
+  легитимность: "<strong>С 1 марта 2026 года действует профстандарт специалиста стройконтроля.</strong> В курсе разбираем, как его использовать, как оформить договор и почему доверие заказчика строится не на корочке, а на первом разговоре."
+};
+
+// ═══════════════════════════════
+//  STATE
+// ═══════════════════════════════
+var score=0, score1=0, score2=0, score3=0, selectedChannel='tg';
+var qIdx=0, barrier="", region="", rd=null, answers=[];
+var block1done=false, block2done=false;
+
+// ═══════════════════════════════
+//  INIT
+// ═══════════════════════════════
+document.addEventListener("DOMContentLoaded", function(){
+  try {
+    var sel = document.getElementById("rsel");
+    ALL_REGIONS.forEach(function(r){
+      var o = document.createElement("option");
+      o.value=r; o.textContent=r; sel.appendChild(o);
+    });
+    document.getElementById("btn-start").onclick  = function(){ show("s-rules"); };
+    document.getElementById("btn-rules").onclick  = function(){ show("s-region"); };
+    document.getElementById("btn-region").onclick = pickRegion;
+    document.getElementById("btn-inter1").onclick = afterInter1;
+    document.getElementById("btn-inter2").onclick = afterInter2;
+    document.getElementById("btn-apnext").onclick = nextQ;
+    sel.addEventListener("change", function(){
+      rd = getRD(this.value);
+      var h = document.getElementById("rhint");
+      h.innerHTML = "<strong style='color:var(--al)'>" + rd.hint.split("·")[0].trim() + "</strong> &nbsp;·&nbsp; " + rd.hint.split("·").slice(1).join("·").trim();
+      h.className = "rhint show";
+    });
+  } catch(e) {
+    document.body.innerHTML = "<div style='color:#eee;padding:40px;font-size:15px'>Ошибка инициализации: "+e.message+"</div>";
+  }
+});
+
+function show(id){
+  document.querySelectorAll(".screen").forEach(function(s){ s.className="screen"; });
+  var el = document.getElementById(id);
+  el.className = "screen show";
+  window.scrollTo(0,0);
+}
+
+function pickRegion(){
+  var sel=document.getElementById("rsel");
+  if(!sel.value){ sel.style.borderColor="#c0392b"; return; }
+  region=sel.value; rd=getRD(region);
+  score+=rd.p; score1+=rd.p;
+  show("s-q"); renderQ();
+}
+
+function renderQ(){
+  var Q=QS[qIdx];
+  // header
+  var blkN = Q.blk;
+  document.getElementById("blk-badge").textContent = "Блок "+blkN;
+  document.getElementById("q-cur").textContent = qIdx+2; // +1 for region, +1 for 0-index
+  var pct = ((qIdx+1)/13)*100;
+  document.getElementById("pbar").style.width = pct+"%";
+
+  var btns = Q.ans.map(function(a,i){
+    return '<div class="ai" id="ai'+i+'" onclick="pickA('+i+')">'
+      +'<div class="aletter">'+a.l+'</div>'
+      +'<div class="atext">'+a.t+'</div></div>';
+  }).join("");
+  document.getElementById("qwrap").innerHTML =
+    '<div class="qlbl">'+Q.lbl+'</div>'
+    +'<div class="qtitle">'+Q.q+'</div>'
+    +'<div class="alist">'+btns+'</div>';
+}
+
+function pickA(i){
+  var Q=QS[qIdx];
+  var a=Q.ans[i];
+  document.querySelectorAll(".ai").forEach(function(el,j){
+    el.classList.toggle("sel",j===i);
+    el.classList.add("locked");
+  });
+  var pts = a.p||0;
+  score+=pts;
+  if(Q.blk===1) score1+=pts;
+  else if(Q.blk===2) score2+=pts;
+  else score3+=pts;
+  if(a.bar) barrier=a.bar;
+  answers.push(i);
+
+  document.getElementById("aptext").textContent = a.a;
+  var btn = document.getElementById("btn-apnext");
+  // check if next is inter
+  var isLastInBlk1 = (qIdx===4);
+  var isLastInBlk2 = (qIdx===9);
+  var isLast = (qIdx===12);
+  if(isLastInBlk1) btn.textContent="Промежуточный итог →";
+  else if(isLastInBlk2) btn.textContent="Промежуточный итог →";
+  else if(isLast) btn.textContent="Получить результат →";
+  else btn.textContent="Следующий вопрос →";
+
+  var ap=document.getElementById("apanel");
+  ap.style.transform="translateY(0)";
+}
+
+function hidePanel(){
+  document.getElementById("apanel").style.transform="translateY(100%)";
+}
+
+function nextQ(){
+  hidePanel();
+  if(qIdx===4){ // end of block 1
+    document.getElementById("int1-score").textContent = getInt1Text(score1);
+    show("s-inter1"); return;
+  }
+  if(qIdx===9){ // end of block 2
+    document.getElementById("int2-score").textContent = getInt2Text(score2);
+    show("s-inter2"); return;
+  }
+  if(qIdx===12){ showResult(); return; }
+  qIdx++; show("s-q"); renderQ();
+}
+
+function afterInter1(){ qIdx++; show("s-q"); renderQ(); }
+function afterInter2(){ qIdx++; show("s-q"); renderQ(); }
+
+// ═══════════════════════════════
+//  RESULT
+// ═══════════════════════════════
+function showResult(){
+  var R = RESULTS[RESULTS.length-1];
+  for(var i=0;i<RESULTS.length;i++){
+    if(score>=RESULTS[i].min){ R=RESULTS[i]; break; }
+  }
+  var now=new Date();
+  var ds=now.toLocaleDateString("ru-RU",{day:"numeric",month:"long",year:"numeric"});
+  var tl={зрелый:"🔴 Зрелый рынок", растущий:"🟡 Рынок в росте", точечный:"🔵 Точечный рынок"};
+
+  // scales
+  var a5=answers[5]||4, a6=answers[6]||4, a8=answers[8]||3, a9=answers[9]||3;
+  var sc = [
+    Math.min(92, rd.p*18 + Math.max(0,(answers[0]||3)===0?30:(answers[0]||3)===1?20:10) + 10),
+    Math.min(92, (4-(a5||4))*18 + (5-(a6||4))*10 + 10),
+    Math.min(92, (a9===2?60:a9===1?45:a9===0?30:20) + 10),
+    Math.min(92, score*2 + 8)
+  ];
+  var scNames=["Потенциал рынка","Опыт и готовность","Каналы и продажи","Общая готовность к старту"];
+
+  document.getElementById("res-inner").innerHTML =
+    '<div class="res-top">'
+      +'<div><div class="res-brand">СТРОИТЕЛЬНЫЙ КОНТРОЛЬ ИЖС</div><div style="font-size:10px;color:var(--dim);margin-top:3px">Диагностика рынка и потенциала</div></div>'
+      +'<div class="res-date">'+ds+'</div>'
+    +'</div>'
+    +'<div class="badge">'+R.badge+'</div>'
+    +'<h2 class="res-h">'+R.title+'</h2>'
+    +'<div class="res-sub">'+R.sub
+      +'<br><br><span style="color:var(--al);font-weight:700">'+region+'</span>&nbsp;&nbsp;<span style="color:var(--dim)">'+tl[rd.t]+'</span>'
+    +'</div>'
+
+    +'<div class="three">'
+      +'<div class="pcard"><div class="pc-lbl">Объём ИЖС</div><div class="pc-val">'+rd.vol.replace("~","≈")+'</div><div class="pc-sub">Динамика: '+rd.dyn+'</div></div>'
+      +'<div class="pcard"><div class="pc-lbl">Стоимость дома</div><div class="pc-val">'+rd.price+'</div><div class="pc-sub">Средняя по региону</div></div>'
+      +'<div class="pcard"><div class="pc-lbl">Цены на технадзор</div><div class="pc-val">от '+rd.tn.split("–")[0].trim()+'</div><div class="pc-sub">за выезд на объект</div></div>'
+    +'</div>'
+
+    +'<div class="sc-block">'
+      +'<div class="sc-hdr">Оценка по четырём параметрам</div>'
+      +scNames.map(function(n,i){ return '<div class="sc-row"><div class="sc-nm">'+n+'</div><div class="sc-bg"><div class="sc-fill" id="sf'+i+'"></div></div><div class="sc-pct">'+sc[i]+'%</div></div>'; }).join("")
+    +'</div>'
+
+    +'<div class="income">'
+      +'<div class="inc-lbl">Реалистичный доход</div>'
+      +'<div class="inc-num">'+R.r1+'</div>'
+      +'<div class="inc-sub">'+R.r2+'</div>'
+    +'</div>'
+
+    +'<div class="rcard">'
+      +'<div class="rcard-title">📍 Карта рынка: '+region+'</div>'
+      +rrow("Тип рынка", tl[rd.t])
+      +rrow("Объём ИЖС", rd.vol)
+      +rrow("Динамика", rd.dyn)
+      +rrow("Средняя стоимость дома", rd.price)
+      +rrow("Ипотека и эскроу", rd.mort)
+      +rrow("Конкуренция среди ТН", rd.comp)
+      +rrow("Цены на технадзор", rd.tn)
+      +'<div class="rnote">'+rd.note+'</div>'
+    +'</div>'
+
+    +'<div class="reco">'
+      +'<div class="reco-lbl">Рекомендация под ваш барьер</div>'
+      +'<div class="reco-txt">'+(BARRIER[barrier]||BARRIER.навыки)+'</div>'
+    +'</div>'
+
+    +'<div class="exit">'
+      +'<div class="exit-lbl">Что дальше</div>'
+      +'<div class="exit-txt">Получите <strong>PDF-отчёт «Рынок технадзора ИЖС: '+region+'»</strong> — с детальными данными, ценами по нише и топ-каналами для вашего типа рынка.</div>'
+    +'</div>';
+
+  document.getElementById("cta").innerHTML =
+  '\n    '<div class=\"cta-h\">Получите гайд и отчёт по вашему региону</div>'\n    +'<div class=\"cta-sub\">Мы отправим материалы на почту и в выбранный мессенджер, как только вы подключите ботов.</div>'\n    +'<div class=\"lm-card\">'\n      +'<div class=\"lm-ico\">📋</div>'\n      +'<div>'\n        +'<div class=\"lm-title\">Что вы получите</div>'\n        +'<div class=\"lm-desc\">Краткий гайд по первым шагам в технадзоре ИЖС и аналитический отчёт по рынку.</div>'\n        +'<div class=\"lm-items\">'\n          +'<div class=\"lm-item\">Чек-лист «Первый выезд на объект»</div>'\n          +'<div class=\"lm-item\">Краткая карточка по вашему региону</div>'\n          +'<div class=\"lm-item\">Сценарии дохода и точки роста</div>'\n        +'</div>'\n      +'</div>'\n    +'</div>'\n    +'<div id=\"cwrap\" style=\"max-width:440px;margin:0 auto\">'\n    +'<input type=\"text\" id=\"ci-name\" class=\"ci\" placeholder=\"Ваше имя\">'\n    +'<input type=\"text\" id=\"ci-email\" class=\"ci\" placeholder=\"Email\">'\n    +'<div style=\"font-size:12px;color:var(--muted);margin:8px 0 6px\">Где удобнее получить гайд дополнительно?</div>'\n    +'<div class=\"channel-row\">'\n      +'<button type=\"button\" class=\"ch-btn ch-btn-active\" data-ch=\"tg\" onclick=\"selectChannel(\\'tg\\')\">Telegram</button>'\n      +'<button type=\"button\" class=\"ch-btn\" data-ch=\"max\" onclick=\"selectChannel(\\'max\\')\">MAX</button>'\n      +'<button type=\"button\" class=\"ch-btn\" data-ch=\"vk\" onclick=\"selectChannel(\\'vk\\')\">ВКонтакте</button>'\n    +'</div>'\n    +'<button class=\"btn full\" onclick=\"submitContact()\">Получить гайд →</button>'\n    +'<div class=\"hint\">Сейчас мы сохраняем только ваш email и выбранный мессенджер. Отправку подключим после настройки ботов.</div>'\n    +'</div>'\n    +'<button class=\"restart\" onclick=\"location.reload()\">← Пройти ещё раз (другой регион)</button>'\n;
+
+  show("s-result");
+  setTimeout(function(){
+    sc.forEach(function(v,i){
+      var el=document.getElementById("sf"+i);
+      if(el) el.style.width=v+"%";
+    });
+  }, 350);
+}
+
+function rrow(k,v){
+  return '<div class="rrow"><div class="rk">'+k+'</div><div class="rv">'+v+'</div></div>';
+}
+
+function selectChannel(ch){
+  selectedChannel = ch;
+  var btns = document.querySelectorAll('.ch-btn');
+  btns.forEach(function(b){
+    if (b.getAttribute('data-ch') === ch) b.classList.add('ch-btn-active');
+    else b.classList.remove('ch-btn-active');
+  });
+}
+
+function submitContact(){
+  var name = document.getElementById('ci-name').value.trim();
+  var email = document.getElementById('ci-email').value.trim();
+  if (!email){
+    document.getElementById('ci-email').style.borderColor = '#c0392b';
+    return;
+  }
+  // Здесь позже можно будет добавить отправку данных на вебхук / форму Геткурса
+  document.getElementById('cwrap').innerHTML =
+    '<div style="text-align:center;padding:24px 0">' +
+    '<div style="font-size:36px;margin-bottom:12px">✅</div>' +
+    '<div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:7px">' +
+    (name ? name + ', ' : '') + 'запрос сохранён!</div>' +
+    '<div style="font-size:13px;color:var(--muted);line-height:1.7">' +
+    'Мы сохранили ваш email и выбранный мессенджер (' +
+    (selectedChannel==='tg' ? 'Telegram' : selectedChannel==='vk' ? 'ВКонтакте' : 'MAX') +
+    '). Как только боты будут готовы, гайд придёт туда и на почту.' +
+    '</div></div>';
+}
+}
+</script>
+</body>
+</html>
