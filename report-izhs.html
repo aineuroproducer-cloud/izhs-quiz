@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Рынок технадзора ИЖС в России 2025–2026 — Аналитический отчёт</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08101A;--bg2:#0D1C2C;--bg3:#102030;
+  --accent:#E8821E;--al:#F5A555;--aglow:rgba(232,130,30,.1);
+  --text:#EEF2F7;--muted:#8A9BB0;--dim:#3A5068;
+  --border:rgba(255,255,255,.07);--card:rgba(255,255,255,.04)
+}
+html{background:var(--bg)}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);
+  line-height:1.65;font-size:14px;
+  max-width:820px;margin:0 auto;padding:0 0 60px
+}
+
+/* PRINT */
+@media print{
+  body{background:#fff;color:#111;max-width:100%;padding:0}
+  :root{--bg:#fff;--bg2:#f5f5f5;--bg3:#ececec;--accent:#c96a10;--al:#c96a10;
+    --text:#111;--muted:#555;--dim:#888;--border:rgba(0,0,0,.1);--card:rgba(0,0,0,.03)}
+  .no-print{display:none!important}
+  .page-break{page-break-before:always}
+  .cover{min-height:auto}
+}
+
+/* COVER */
+.cover{
+  background:linear-gradient(160deg,#0a1a2e 0%,#081420 60%,#0a1008 100%);
+  padding:60px 48px 52px;position:relative;overflow:hidden;
+  border-bottom:1px solid var(--border)
+}
+.cover::before{
+  content:"";position:absolute;top:-60px;right:-60px;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,130,30,.08) 0%,transparent 70%);
+  pointer-events:none
+}
+.cover-top{display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:48px;flex-wrap:wrap;gap:12px}
+.cover-brand{font-size:9px;font-weight:800;letter-spacing:.22em;color:var(--al);
+  text-transform:uppercase}
+.cover-meta{font-size:10px;color:var(--dim);letter-spacing:.06em}
+.cover-tag{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.14em;
+  color:#fff;background:var(--accent);padding:4px 12px;border-radius:20px;
+  text-transform:uppercase;margin-bottom:16px}
+.cover-h1{font-size:clamp(26px,5vw,48px);font-weight:900;line-height:1.08;
+  letter-spacing:-.025em;margin-bottom:10px}
+.cover-h1 em{font-style:italic;font-weight:400;color:var(--al)}
+.cover-h2{font-size:clamp(14px,2vw,18px);color:var(--muted);font-weight:400;
+  line-height:1.55;margin-bottom:40px;max-width:520px}
+.cover-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:600px){.cover-stats{grid-template-columns:1fr 1fr}}
+.cstat{padding:14px 16px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);border-radius:10px}
+.cstat-v{font-size:clamp(18px,3vw,26px);font-weight:900;color:var(--al);
+  line-height:1.1;margin-bottom:4px}
+.cstat-l{font-size:10px;color:var(--muted);line-height:1.4;letter-spacing:.03em}
+
+/* NAV / TOC */
+.toc{padding:32px 48px;border-bottom:1px solid var(--border)}
+.toc-title{font-size:9px;font-weight:800;letter-spacing:.2em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:16px}
+.toc-list{display:flex;flex-direction:column;gap:8px}
+.toc-item{display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--muted)}
+.toc-num{color:var(--accent);font-weight:700;font-size:10px;min-width:20px}
+.toc-name{color:var(--text);font-weight:500}
+.toc-dots{flex:1;border-bottom:1px dotted var(--dim);margin:0 4px 3px}
+.toc-pg{font-size:10px;color:var(--dim)}
+
+/* SECTION */
+.section{padding:36px 48px;border-bottom:1px solid var(--border)}
+.section:last-child{border:none}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.sec-num{font-size:9px;font-weight:800;letter-spacing:.18em;color:var(--accent);
+  text-transform:uppercase;flex-shrink:0}
+.sec-line{flex:1;height:1px;background:rgba(232,130,30,.2)}
+.sec-h2{font-size:clamp(17px,2.8vw,24px);font-weight:800;line-height:1.25;margin-bottom:16px}
+.sec-lead{font-size:15px;color:var(--al);font-weight:600;line-height:1.6;margin-bottom:16px;
+  padding-left:14px;border-left:3px solid var(--accent)}
+.sec-body{font-size:13.5px;color:var(--muted);line-height:1.8;margin-bottom:16px}
+.sec-body strong{color:var(--text)}
+.sec-body em{color:var(--al);font-style:normal;font-weight:600}
+
+/* CALLOUT */
+.callout{background:var(--aglow);border:1px solid rgba(232,130,30,.2);
+  border-radius:10px;padding:14px 18px;margin:16px 0;font-size:13px;
+  color:var(--muted);line-height:1.7}
+.callout strong{color:var(--text)}
+.callout.warn{background:rgba(220,50,50,.06);border-color:rgba(220,50,50,.18)}
+.callout.warn strong{color:#e07070}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin:18px 0}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:rgba(232,130,30,.12);color:var(--al);font-weight:700;
+  padding:9px 12px;text-align:left;font-size:10px;letter-spacing:.06em;
+  border-bottom:1px solid rgba(232,130,30,.2);white-space:nowrap}
+td{padding:9px 12px;color:var(--muted);border-bottom:1px solid var(--border);
+  vertical-align:top;line-height:1.5}
+td strong{color:var(--text)}
+tr:last-child td{border:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.badge-t{display:inline-block;font-size:9px;font-weight:800;padding:2px 8px;
+  border-radius:10px;letter-spacing:.05em}
+.badge-red{background:rgba(232,80,80,.15);color:#e08080}
+.badge-grn{background:rgba(80,200,120,.12);color:#70c890}
+.badge-ylw{background:rgba(232,180,30,.12);color:#d4b050}
+.badge-blu{background:rgba(80,150,230,.12);color:#80a8e0}
+
+/* CARDS GRID */
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+@media(max-width:520px){.cards{grid-template-columns:1fr}}
+.card{padding:14px 16px;background:var(--card);border:1px solid var(--border);
+  border-radius:10px}
+.card-lbl{font-size:8px;font-weight:800;letter-spacing:.18em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:6px}
+.card-v{font-size:clamp(15px,2.5vw,20px);font-weight:800;color:var(--al);
+  line-height:1.15;margin-bottom:4px}
+.card-sub{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* REGION MAP */
+.region-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+@media(max-width:560px){.region-grid{grid-template-columns:1fr 1fr}}
+.rbox{padding:12px 14px;border:1px solid var(--border);border-radius:9px;background:var(--card)}
+.rbox-name{font-size:11px;font-weight:700;color:var(--text);margin-bottom:5px}
+.rbox-type{font-size:9px;font-weight:800;letter-spacing:.08em;margin-bottom:5px}
+.rbox-vol{font-size:10px;color:var(--muted)}
+.rbox-dyn{font-size:10px;font-weight:700}
+.type-z{color:#e08080}.type-r{color:#d4b050}.type-t{color:#80a8e0}
+
+/* INCOME CALC */
+.income-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+@media(max-width:520px){.income-grid{grid-template-columns:1fr}}
+.ic{padding:16px;border-radius:10px;border:1px solid var(--border)}
+.ic-lbl{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.ic-num{font-size:clamp(16px,2.5vw,22px);font-weight:900;margin-bottom:5px;line-height:1.1}
+.ic-sub{font-size:11px;color:var(--muted);line-height:1.5}
+.ic1{background:rgba(232,130,30,.06);border-color:rgba(232,130,30,.18)}
+.ic1 .ic-lbl{color:var(--al)}.ic1 .ic-num{color:var(--al)}
+.ic2{background:rgba(80,200,120,.05);border-color:rgba(80,200,120,.15)}
+.ic2 .ic-lbl{color:#70c890}.ic2 .ic-num{color:#70c890}
+.ic3{background:rgba(140,100,240,.06);border-color:rgba(140,100,240,.18)}
+.ic3 .ic-lbl{color:#a880e8}.ic3 .ic-num{color:#a880e8}
+
+/* CHANNEL CARDS */
+.ch-list{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.ch{display:flex;gap:14px;padding:13px 15px;background:var(--card);
+  border:1px solid var(--border);border-radius:9px;align-items:flex-start}
+.ch-ico{font-size:18px;flex-shrink:0}
+.ch-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.ch-desc{font-size:12px;color:var(--muted);line-height:1.55}
+.ch-tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;
+  border-radius:8px;margin-top:5px}
+.ch-hot{background:rgba(232,80,80,.12);color:#e08080}
+.ch-med{background:rgba(232,180,30,.1);color:#d4a840}
+.ch-grow{background:rgba(80,200,120,.1);color:#60c880}
+
+/* FOOTER */
+.footer{padding:24px 48px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.footer-brand{font-size:9px;font-weight:800;letter-spacing:.18em;color:var(--al)}
+.footer-note{font-size:10px;color:var(--dim);text-align:right}
+
+/* PRINT BTN */
+.print-bar{position:sticky;top:0;background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:10px 48px;display:flex;justify-content:space-between;align-items:center;z-index:100}
+.print-label{font-size:10px;color:var(--dim);letter-spacing:.05em}
+.print-btn{padding:7px 16px;background:var(--accent);color:#fff;border:none;
+  border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.print-btn:hover{background:var(--al)}
+
+@media(max-width:600px){
+  .cover,.toc,.section,.footer,.print-bar{padding-left:20px;padding-right:20px}
+  .cover-stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- PRINT BAR -->
+<div class="print-bar no-print">
+  <div class="print-label">АНАЛИТИЧЕСКИЙ ОТЧЁТ · ТЕХНАДЗОР ИЖС 2025–2026</div>
+  <button class="print-btn" onclick="window.print()">⬇ Сохранить PDF</button>
+</div>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-brand">Строительный контроль ИЖС</div>
+    <div class="cover-meta">РОССИЯ · 2025–2026 · V1.0</div>
+  </div>
+  <div class="cover-tag">Аналитический отчёт</div>
+  <h1 class="cover-h1">Рынок технадзора<br>в ИЖС России:<br><em>цифры, регионы,<br>возможности</em></h1>
+  <p class="cover-h2">Объём рынка, региональная карта, цены на услуги, спрос и каналы привлечения клиентов — всё, что нужно специалисту для обоснованного старта в нише строительного контроля частных домов.</p>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-v">≈117 000 ₽</div><div class="cstat-l">Медианная з/п специалиста стройконтроля, 2025</div></div>
+    <div class="cstat"><div class="cstat-v">58,5 млн м²</div><div class="cstat-l">Введено ИЖС в России в 2024 году</div></div>
+    <div class="cstat"><div class="cstat-v">62%</div><div class="cstat-l">Доля ИЖС в общем вводе жилья, 2024</div></div>
+    <div class="cstat"><div class="cstat-v">&lt;1%</div><div class="cstat-l">Доля эскроу в ИЖС — рынок только начинается</div></div>
+    <div class="cstat"><div class="cstat-v">27 000+</div><div class="cstat-l">Открытых вакансий по стройконтролю в РФ</div></div>
+    <div class="cstat"><div class="cstat-v">01.03.2026</div><div class="cstat-l">Новый профстандарт специалиста стройконтроля</div></div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">Содержание</div>
+  <div class="toc-list">
+    <div class="toc-item"><div class="toc-num">01</div><div class="toc-name">Рынок ИЖС в России</div><div class="toc-dots"></div></div>
+    <div class="toc-item"><div class="toc-num">02</div><div class="toc-name">Региональная карта — топ-20 регионов</div><div class="toc-dots"></div></div>
+    <div class="toc-item"><div class="toc-num">03</div><div class="toc-name">Регулирование и эскроу: новые правила 2025–2026</div><div class="toc-dots"></div></div>
+    <div class="toc-item"><div class="toc-num">04</div><div class="toc-name">Цены на технадзор по регионам</div><div class="toc-dots"></div></div>
+    <div class="toc-item"><div class="toc-num">05</div><div class="toc-name">Доходные сценарии для специалиста</div><div class="toc-dots"></div></div>
+    <div class="toc-item"><div class="toc-num">06</div><div class="toc-name">Каналы привлечения клиентов</div><div class="toc-dots"></div></div>
+    <div class="toc-item"><div class="toc-num">07</div><div class="toc-name">Целевая аудитория: сегменты и боли</div><div class="toc-dots"></div></div>
+    <div class="toc-item"><div class="toc-num">08</div><div class="toc-name">Тренды и окна возможностей 2025–2027</div><div class="toc-dots"></div></div>
+  </div>
+</div>
+
+<!-- 01 РЫНОК -->
+<div class="section">
+  <div class="sec-head"><div class="sec-num">Раздел 01</div><div class="sec-line"></div></div>
+  <h2 class="sec-h2">Рынок ИЖС в России: масштаб и динамика</h2>
+  <div class="sec-lead">ИЖС — крупнейший сегмент жилищного строительства России. В 2024 году введено 58,5 млн м² — это 62% всего введённого жилья в стране.</div>
+  <div class="sec-body">
+    Рынок индивидуального жилищного строительства устойчиво растёт: <strong>с 37,5 млн м² в 2020 году до 58,5 млн м² в 2024-м</strong> — прирост 56% за 4 года. При этом рынок профессионального технадзора остаётся <em>практически пустым</em>: большинство частных застройщиков строят без какого-либо независимого контроля.
+  </div>
+  <div class="cards">
+    <div class="card"><div class="card-lbl">Ввод ИЖС 2024</div><div class="card-v">58,5 млн м²</div><div class="card-sub">+3% к 2023 году</div></div>
+    <div class="card"><div class="card-lbl">Доля в общем вводе</div><div class="card-v">62%</div><div class="card-sub">Рекордный показатель для РФ</div></div>
+    <div class="card"><div class="card-lbl">Средняя стоимость дома</div><div class="card-v">7,05 млн ₽</div><div class="card-sub">Февраль 2026, данные ДОМ.РФ</div></div>
+    <div class="card"><div class="card-lbl">Ипотека ИЖС 2024</div><div class="card-v">51 млрд ₽</div><div class="card-sub">+40% к 2023</div></div>
+    <div class="card"><div class="card-lbl">Вакансии стройконтроль</div><div class="card-v">27 000+</div><div class="card-sub">Медиана 117 000 ₽/мес.</div></div>
+    <div class="card"><div class="card-lbl">Дефицит специалистов</div><div class="card-v">2,4×</div><div class="card-sub">Резюме на вакансию (vs ~5 в среднем)</div></div>
+  </div>
+  <div class="callout">
+    <strong>Ключевой вывод:</strong> Рынок ИЖС огромный и растущий, а рынок профессионального технадзора в нём — практически не занятый. Соотношение спроса и предложения создаёт возможность для специалиста с системным подходом.
+  </div>
+</div>
+
+<!-- 02 РЕГИОНЫ -->
+<div class="section">
+  <div class="sec-head"><div class="sec-num">Раздел 02</div><div class="sec-line"></div></div>
+  <h2 class="sec-h2">Региональная карта: топ-20 рынков</h2>
+  <div class="sec-lead">Три типа регионов с принципиально разными стратегиями входа: «зрелый», «растущий» и «точечный».</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Регион</th><th>Тип рынка</th><th>Объём ИЖС</th><th>Динамика</th><th>Цена дома</th><th>Конкуренция ТН</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Московская обл.</strong></td><td><span class="badge-t badge-red">🔴 зрелый</span></td><td>≈40 000 д/год</td><td>+8%</td><td>9–15 млн</td><td>Высокая</td></tr>
+        <tr><td><strong>Краснодарский край</strong></td><td><span class="badge-t badge-red">🔴 зрелый</span></td><td>≈35 000 д/год</td><td>+12%</td><td>7–12 млн</td><td>Средняя</td></tr>
+        <tr><td><strong>Республика Татарстан</strong></td><td><span class="badge-t badge-red">🔴 зрелый</span></td><td>≈22 000 д/год</td><td>+11%</td><td>6–9 млн</td><td>Средняя</td></tr>
+        <tr><td><strong>Республика Башкортостан</strong></td><td><span class="badge-t badge-ylw">🟡 растущий</span></td><td>≈19 000 д/год</td><td>+15%</td><td>4,5–7 млн</td><td>Невысокая</td></tr>
+        <tr><td><strong>Ростовская область</strong></td><td><span class="badge-t badge-red">🔴 зрелый</span></td><td>≈20 000 д/год</td><td>+10%</td><td>5,5–8 млн</td><td>Средняя</td></tr>
+        <tr><td><strong>Ленинградская обл.</strong></td><td><span class="badge-t badge-red">🔴 зрелый</span></td><td>≈18 000 д/год</td><td>+9%</td><td>10–14 млн</td><td>Средняя</td></tr>
+        <tr><td><strong>Республика Дагестан</strong></td><td><span class="badge-t badge-ylw">🟡 растущий</span></td><td>≈18 000 д/год</td><td><strong>🔥 +120%</strong></td><td>3,5–6 млн</td><td>Очень низкая</td></tr>
+        <tr><td><strong>Свердловская область</strong></td><td><span class="badge-t badge-red">🔴 зрелый</span></td><td>≈15 000 д/год</td><td>+11%</td><td>6–9 млн</td><td>Средняя</td></tr>
+        <tr><td><strong>Тюменская область</strong></td><td><span class="badge-t badge-red">🔴 зрелый</span></td><td>≈16 000 д/год</td><td>+14%</td><td>7–11 млн</td><td>Невысокая</td></tr>
+        <tr><td><strong>Новосибирская обл.</strong></td><td><span class="badge-t badge-red">🔴 зрелый</span></td><td>≈14 000 д/год</td><td>+13%</td><td>5,5–8 млн</td><td>Средняя</td></tr>
+        <tr><td><strong>Воронежская область</strong></td><td><span class="badge-t badge-red">🔴 зрелый</span></td><td>≈14 000 д/год</td><td>+13%</td><td>4,5–7 млн</td><td>Невысокая</td></tr>
+        <tr><td><strong>Самарская область</strong></td><td><span class="badge-t badge-ylw">🟡 растущий</span></td><td>≈13 000 д/год</td><td>+18%</td><td>5–8 млн</td><td>Невысокая</td></tr>
+        <tr><td><strong>Красноярский край</strong></td><td><span class="badge-t badge-ylw">🟡 растущий</span></td><td>≈12 000 д/год</td><td>+16%</td><td>5,5–8,5 млн</td><td>Низкая</td></tr>
+        <tr><td><strong>Нижегородская обл.</strong></td><td><span class="badge-t badge-red">🔴 зрелый</span></td><td>≈13 000 д/год</td><td>+10%</td><td>5–8 млн</td><td>Невысокая</td></tr>
+        <tr><td><strong>Белгородская область</strong></td><td><span class="badge-t badge-red">🔴 зрелый</span></td><td>≈12 000 д/год</td><td>+7%</td><td>4,5–7 млн</td><td>Средняя</td></tr>
+        <tr><td><strong>Ставропольский край</strong></td><td><span class="badge-t badge-ylw">🟡 растущий</span></td><td>≈11 000 д/год</td><td>+14%</td><td>4–7 млн</td><td>Низкая</td></tr>
+        <tr><td><strong>Иркутская область</strong></td><td><span class="badge-t badge-ylw">🟡 растущий</span></td><td>≈10 000 д/год</td><td>+18%</td><td>5–7,5 млн</td><td>Очень низкая</td></tr>
+        <tr><td><strong>Пермский край</strong></td><td><span class="badge-t badge-ylw">🟡 растущий</span></td><td>≈10 000 д/год</td><td>+13%</td><td>5–7,5 млн</td><td>Низкая</td></tr>
+        <tr><td><strong>Тверская область</strong></td><td><span class="badge-t badge-ylw">🟡 растущий</span></td><td>≈9 000 д/год</td><td>+19%</td><td>4–6 млн</td><td>Очень низкая</td></tr>
+        <tr><td><strong>Омская область</strong></td><td><span class="badge-t badge-ylw">🟡 растущий</span></td><td>≈9 000 д/год</td><td>+14%</td><td>4,5–7 млн</td><td>Низкая</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <strong>Лучшие регионы для входа прямо сейчас:</strong> Дагестан (+120% роста, конкуренция практически нулевая), Тверская (+19%, близость к Москве), Самарская (+18%), Иркутская (+18%), Тюменская (зрелый рынок + низкая конкуренция среди ТН).
+  </div>
+</div>
+
+<!-- 03 РЕГУЛИРОВАНИЕ -->
+<div class="section">
+  <div class="sec-head"><div class="sec-num">Раздел 03</div><div class="sec-line"></div></div>
+  <h2 class="sec-h2">Регулирование: новые правила 2025–2026</h2>
+  <div class="sec-lead">2025–2026 — переломный период для рынка технадзора ИЖС. Два ключевых события создают структурный спрос.</div>
+  <div class="sec-body">
+    <strong>186-ФЗ (эскроу в ИЖС, с марта 2025):</strong> при ипотечном строительстве деньги хранятся на эскроу-счёте и выплачиваются подрядчику поэтапно только после прохождения банковского контроля. Банк фактически становится <em>обязательным заказчиком технадзора</em> — это принципиально меняет структуру спроса.
+  </div>
+  <div class="sec-body">
+    <strong>Профстандарт «Специалист стройконтроля» (Приказ Минтруда №558н, с 01.03.2026):</strong> впервые закреплены требования к компетенциям и функциям специалиста строительного контроля. Документ создаёт нормативную базу для аттестации и повышает статус профессии.
+  </div>
+  <div class="callout">
+    <strong>Что это означает для специалиста:</strong> Банки начинают формировать реестры аккредитованных ТН-специалистов. Попадание в такой реестр = стабильный поток клиентов по ипотечным сделкам без маркетинговых затрат.
+  </div>
+  <div class="callout warn">
+    <strong>Важно:</strong> Обязательный технадзор для всех объектов ИЖС в законодательстве пока не закреплён. Спрос формируется рыночным путём: банки, осознанные заказчики, судебная практика.
+  </div>
+</div>
+
+<!-- 04 ЦЕНЫ -->
+<div class="section">
+  <div class="sec-head"><div class="sec-num">Раздел 04</div><div class="sec-line"></div></div>
+  <h2 class="sec-h2">Цены на технадзор по регионам</h2>
+  <div class="sec-lead">Диапазоны цен существенно различаются по регионам — от 5 000 до 60 000 руб. за выезд. Модели оплаты: разовый выезд, абонемент или % от сметы.</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Регион</th><th>Разовый выезд</th><th>Сопровождение объекта</th><th>Абонемент/мес.</th><th>% от сметы</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Москва и МО</strong></td><td>25 000–60 000 ₽</td><td>150 000–400 000 ₽</td><td>40 000–80 000 ₽</td><td>1,5–3%</td></tr>
+        <tr><td><strong>Санкт-Петербург / ЛО</strong></td><td>20 000–50 000 ₽</td><td>120 000–300 000 ₽</td><td>35 000–65 000 ₽</td><td>1,5–2,5%</td></tr>
+        <tr><td><strong>Краснодарский край</strong></td><td>15 000–40 000 ₽</td><td>80 000–200 000 ₽</td><td>25 000–50 000 ₽</td><td>1–2%</td></tr>
+        <tr><td><strong>Татарстан (Казань)</strong></td><td>12 000–30 000 ₽</td><td>60 000–150 000 ₽</td><td>20 000–40 000 ₽</td><td>1–2%</td></tr>
+        <tr><td><strong>Тюменская область</strong></td><td>15 000–35 000 ₽</td><td>70 000–160 000 ₽</td><td>22 000–45 000 ₽</td><td>1–1,5%</td></tr>
+        <tr><td><strong>Ростовская область</strong></td><td>10 000–25 000 ₽</td><td>50 000–120 000 ₽</td><td>18 000–35 000 ₽</td><td>0,8–1,5%</td></tr>
+        <tr><td><strong>Свердловская обл.</strong></td><td>12 000–28 000 ₽</td><td>55 000–130 000 ₽</td><td>20 000–38 000 ₽</td><td>1–1,5%</td></tr>
+        <tr><td><strong>Новосибирская обл.</strong></td><td>10 000–24 000 ₽</td><td>50 000–120 000 ₽</td><td>17 000–32 000 ₽</td><td>0,8–1,5%</td></tr>
+        <tr><td><strong>Регионы ПФО / ЦФО</strong></td><td>8 000–20 000 ₽</td><td>35 000–90 000 ₽</td><td>12 000–25 000 ₽</td><td>0,7–1,3%</td></tr>
+        <tr><td><strong>Растущие регионы</strong></td><td>5 000–18 000 ₽</td><td>25 000–70 000 ₽</td><td>10 000–20 000 ₽</td><td>0,5–1%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>Экономика для заказчика:</strong> При стоимости дома 7 млн руб. дефекты стройки в среднем стоят 500 000–1 500 000 руб. (переделки, судебные споры). Технадзор на весь цикл строительства — 80 000–150 000 руб. Соотношение 1:5–10 в пользу контроля. Это главный аргумент в продажах.
+  </div>
+</div>
+
+<!-- 05 ДОХОД -->
+<div class="section">
+  <div class="sec-head"><div class="sec-num">Раздел 05</div><div class="sec-line"></div></div>
+  <h2 class="sec-h2">Доходные сценарии для специалиста</h2>
+  <div class="sec-lead">Три сценария загрузки — от старта до устойчивой практики.</div>
+
+  <div class="income-grid">
+    <div class="ic ic1">
+      <div class="ic-lbl">🟠 Старт</div>
+      <div class="ic-num">80 000–120 000 ₽</div>
+      <div class="ic-sub">1 объект сопровождения + 2–3 разовых выезда в месяц. Первые 1–2 месяца работы.</div>
+    </div>
+    <div class="ic ic2">
+      <div class="ic-lbl">🟢 Рабочий режим</div>
+      <div class="ic-num">180 000–270 000 ₽</div>
+      <div class="ic-sub">2–3 объекта одновременно + 3–5 разовых выездов. Достижимо через 3–4 месяца.</div>
+    </div>
+    <div class="ic ic3">
+      <div class="ic-lbl">🟣 Полная загрузка</div>
+      <div class="ic-num">300 000–500 000 ₽</div>
+      <div class="ic-sub">4–6 объектов + партнёрства с банками/риелторами. Через 6–12 месяцев.</div>
+    </div>
+  </div>
+
+  <div class="sec-body" style="margin-top:12px">
+    <strong>Модель расчёта (средний регион, сопровождение объекта):</strong> Дом 7 млн руб. строится 8–14 месяцев. Технадзор = 1,2% от сметы = 84 000 руб. за объект. При 3 параллельных объектах и 4 разовых выездах по 12 000 руб. = <em>300 000 руб./мес.</em>
+  </div>
+</div>
+
+<!-- 06 КАНАЛЫ -->
+<div class="section">
+  <div class="sec-head"><div class="sec-num">Раздел 06</div><div class="sec-line"></div></div>
+  <h2 class="sec-h2">Каналы привлечения клиентов</h2>
+  <div class="sec-lead">Эффективность каналов сильно зависит от типа рынка региона. Что работает в Москве — не обязательно работает в Иркутске.</div>
+
+  <div class="ch-list">
+    <div class="ch">
+      <div class="ch-ico">📋</div>
+      <div>
+        <div class="ch-title">Авито / Профи.ру / Яндекс.Услуги</div>
+        <div class="ch-desc">Самый быстрый старт без бюджета. При правильно оформленном объявлении — первые заявки в течение недели. Работает в регионах с любым типом рынка. Авито в 2024–2025 году ужесточил правила продвижения платных объявлений, но органика по-прежнему работает.</div>
+        <span class="ch-tag ch-hot">Быстрый старт</span>
+      </div>
+    </div>
+    <div class="ch">
+      <div class="ch-ico">🏦</div>
+      <div>
+        <div class="ch-title">Банки (реестры ТН для эскроу-сделок)</div>
+        <div class="ch-desc">После 186-ФЗ банки формируют реестры аккредитованных специалистов технадзора. Попадание в реестр одного банка = стабильный поток клиентов по ипотечным сделкам без рекламы. Лидеры: Сбер ДомКлик, ВТБ, ДОМ.РФ.</div>
+        <span class="ch-tag ch-grow">Долгосрочный поток</span>
+      </div>
+    </div>
+    <div class="ch">
+      <div class="ch-ico">🤝</div>
+      <div>
+        <div class="ch-title">Партнёрства: риелторы, юристы, архитекторы</div>
+        <div class="ch-desc">Риелтор, работающий с загородной недвижимостью, постоянно видит клиентов, которые покупают участок или строящийся дом. Реферальное партнёрство с 3–5 риелторами = 2–4 заявки в месяц без маркетинговых затрат.</div>
+        <span class="ch-tag ch-grow">Реферальный поток</span>
+      </div>
+    </div>
+    <div class="ch">
+      <div class="ch-ico">📱</div>
+      <div>
+        <div class="ch-title">Telegram-канал / соцсети</div>
+        <div class="ch-desc">Самый масштабируемый канал. Специалист с Telegram-каналом про ошибки на стройке, советы заказчикам и реальные кейсы формирует входящий поток заявок. Первые 500–1000 подписчиков = 4–8 обращений в месяц.</div>
+        <span class="ch-tag ch-grow">Масштабирование</span>
+      </div>
+    </div>
+    <div class="ch">
+      <div class="ch-ico">👷</div>
+      <div>
+        <div class="ch-title">Строительные форумы, ЖК-чаты, Telegram-сообщества</div>
+        <div class="ch-desc">Местные чаты жилых комплексов, форумы о строительстве (forumhouse.ru), локальные сообщества — высококонцентрированная аудитория потенциальных заказчиков. Экспертный ответ на вопрос → узнаваемость → заявка.</div>
+        <span class="ch-tag ch-med">Органическое присутствие</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 07 АУДИТОРИЯ -->
+<div class="section">
+  <div class="sec-head"><div class="sec-num">Раздел 07</div><div class="sec-line"></div></div>
+  <h2 class="sec-h2">Целевая аудитория специалистов: сегменты</h2>
+  <div class="sec-lead">Кто идёт в технадзор ИЖС и с какими барьерами сталкивается.</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Сегмент</th><th>Профиль</th><th>Главная боль</th><th>Мотивация</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Опытные прорабы / мастера</strong></td>
+          <td>10+ лет на стройке, наёмная работа или бригада</td>
+          <td>«Знаю всё, но не умею продавать себя»</td>
+          <td>Независимость, рост дохода</td>
+        </tr>
+        <tr>
+          <td><strong>Проектировщики / инженеры ПТО</strong></td>
+          <td>Офисный опыт, хорошая документальная база</td>
+          <td>«Понимаю теорию, меньше уверенности на объекте»</td>
+          <td>Практика + дополнительный доход</td>
+        </tr>
+        <tr>
+          <td><strong>Смежные специалисты</strong></td>
+          <td>Электрики, сантехники, отделочники</td>
+          <td>«Не знаю, хватит ли знаний по конструктиву»</td>
+          <td>Узкая специализация внутри ниши</td>
+        </tr>
+        <tr>
+          <td><strong>Новички без опыта</strong></td>
+          <td>Смена профессии, строительное образование</td>
+          <td>«С чего начать, если нет портфолио»</td>
+          <td>Новая карьера, выход на фриланс</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>Общий барьер для всех сегментов:</strong> Технические специалисты не умеют продавать свои услуги. Большинство застревают не на отсутствии знаний, а на отсутствии системы привлечения клиентов и умения обосновать цену.
+  </div>
+</div>
+
+<!-- 08 ТРЕНДЫ -->
+<div class="section">
+  <div class="sec-head"><div class="sec-num">Раздел 08</div><div class="sec-line"></div></div>
+  <h2 class="sec-h2">Тренды и окна возможностей 2025–2027</h2>
+  <div class="sec-lead">Ниша находится в точке максимальной возможности: рынок большой, регулирование ужесточается, конкуренции почти нет.</div>
+
+  <div class="ch-list">
+    <div class="ch">
+      <div class="ch-ico">📈</div>
+      <div>
+        <div class="ch-title">Рост через эскроу: банки создают системный спрос</div>
+        <div class="ch-desc">С марта 2025 года каждая ипотечная стройка в ИЖС проходит через банковский контроль. Банки нуждаются в аккредитованных ТН-специалистах. Это создаёт B2B-спрос, который будет только расти по мере проникновения ипотеки ИЖС.</div>
+      </div>
+    </div>
+    <div class="ch">
+      <div class="ch-ico">⚖️</div>
+      <div>
+        <div class="ch-title">Рост судебных споров → рост спроса на превентивный контроль</div>
+        <div class="ch-desc">Количество судебных дел по качеству строительства ИЖС растёт. Каждый громкий случай в регионе — это 20–50 заказчиков, которые начинают искать технадзор. Специалист с экспертным контентом в нужный момент получает поток заявок.</div>
+      </div>
+    </div>
+    <div class="ch">
+      <div class="ch-ico">🌍</div>
+      <div>
+        <div class="ch-title">Регионализация: рост рынков за пределами Москвы</div>
+        <div class="ch-desc">Дагестан, Тверская, Самарская, Иркутская, Пермская — эти регионы растут темпами 15–120% при почти нулевой конкуренции среди ТН-специалистов. Первый выходящий публично — захватывает рынок на годы.</div>
+      </div>
+    </div>
+    <div class="ch">
+      <div class="ch-ico">🏠</div>
+      <div>
+        <div class="ch-title">Стандартизация деревянного домостроения</div>
+        <div class="ch-desc">НОСТРОЙ и Минстрой работают над СТО по деревянному домостроению. Специализация в этом сегменте (каркасные дома, CLT, брус) создаёт нишу внутри ниши с премиальным чеком и низкой конкуренцией.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:8px">
+    <strong>Главный риск:</strong> Промедление. Рынок открытый сейчас — через 2–3 года сформируются устойчивые игроки и реестры банков. Заходить после — сложнее и дороже.
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer no-print">
+  <div class="footer-brand">Строительный контроль ИЖС · Аналитический отчёт</div>
+  <div class="footer-note">Данные: Росстат, ДОМ.РФ, hh.ru, судебная практика<br>Актуально: 2025–2026</div>
+</div>
+
+</body>
+</html>

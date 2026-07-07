@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кто за что отвечает на стройке ИЖС</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  :root {
+    --green:       #2E7D32;
+    --green-mid:   #3A9B3F;
+    --green-light: #E8F5E9;
+    --green-pale:  #F1F8F1;
+    --beige:       #F5F0E8;
+    --beige-dark:  #E8DFC8;
+    --beige-deep:  #C9B99A;
+    --text:        #1A2A1A;
+    --muted:       #5A6E5A;
+    --white:       #FFFFFF;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--beige);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* ── ОБЛОЖКА ── */
+  .cover {
+    background: var(--green);
+    color: var(--white);
+    padding: 56px 52px 48px;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.07);
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.05);
+  }
+  .cover-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.65);
+    margin-bottom: 32px;
+  }
+  .cover-title {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -.02em;
+  }
+  .cover-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--beige-dark);
+  }
+  .cover-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,.75);
+    max-width: 480px;
+    margin-bottom: 48px;
+    line-height: 1.65;
+  }
+  .cover-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .cover-pill {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,.9);
+  }
+  .cover-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid rgba(255,255,255,.15);
+    padding-top: 20px;
+  }
+  .cover-brand {
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(255,255,255,.85);
+    letter-spacing: .05em;
+  }
+  .cover-note {
+    font-size: 10px;
+    color: rgba(255,255,255,.45);
+  }
+
+  /* ── СТРАНИЦЫ ── */
+  .page {
+    background: var(--beige);
+    padding: 48px 52px;
+    page-break-after: always;
+    min-height: 100vh;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* ── СЕКЦИЯ-ЗАГОЛОВОК ── */
+  .sec-num {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    margin-bottom: 6px;
+  }
+  .sec-title {
+    font-size: clamp(18px, 2.5vw, 24px);
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .sec-title em { font-style: italic; font-weight: 400; color: var(--green-mid); }
+  .sec-lead {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    max-width: 600px;
+    line-height: 1.7;
+    border-left: 3px solid var(--green-mid);
+    padding-left: 14px;
+  }
+
+  /* ── ТАБЛИЦА РОЛЕЙ ── */
+  .role-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 28px;
+  }
+  .role-table th {
+    background: var(--green);
+    color: var(--white);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+  }
+  .role-table th:first-child { border-radius: 8px 0 0 0; }
+  .role-table th:last-child  { border-radius: 0 8px 0 0; }
+  .role-table td {
+    padding: 12px 14px;
+    font-size: 12px;
+    vertical-align: top;
+    border-bottom: 1px solid var(--beige-dark);
+    background: var(--white);
+  }
+  .role-table tr:nth-child(odd) td  { background: var(--white); }
+  .role-table tr:nth-child(even) td { background: var(--green-pale); }
+  .role-table tr:last-child td:first-child  { border-radius: 0 0 0 8px; }
+  .role-table tr:last-child td:last-child   { border-radius: 0 0 8px 0; }
+  .role-name {
+    font-weight: 800;
+    color: var(--green);
+    font-size: 12px;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .role-sub {
+    font-size: 10px;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .norm {
+    display: inline-block;
+    background: var(--beige-dark);
+    color: var(--green);
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 4px;
+    padding: 2px 6px;
+    white-space: nowrap;
+  }
+
+  /* ── ВЫВОДЫ ── */
+  .conclusions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .conclusion-card {
+    background: var(--white);
+    border-radius: 10px;
+    border-left: 4px solid var(--green-mid);
+    padding: 14px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .c-num {
+    width: 26px; height: 26px;
+    background: var(--green);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .c-text { font-size: 12.5px; line-height: 1.6; }
+  .c-text strong { color: var(--green); }
+
+  /* ── ЛОВУШКИ ── */
+  .traps { display: flex; flex-direction: column; gap: 14px; }
+  .trap-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 16px 20px;
+    border: 1px solid var(--beige-dark);
+  }
+  .trap-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--beige-deep);
+    margin-bottom: 5px;
+  }
+  .trap-q {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .trap-a {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.65;
+    padding-left: 14px;
+    border-left: 2px solid var(--green-light);
+  }
+  .trap-a strong { color: var(--green); font-weight: 700; }
+
+  /* ── ЧЕК-ЛИСТ ── */
+  .checklist-group { margin-bottom: 22px; }
+  .cl-title {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--beige-dark);
+  }
+  .cl-items { display: flex; flex-direction: column; gap: 8px; }
+  .cl-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  .cl-box {
+    width: 18px; height: 18px;
+    border: 2px solid var(--green-mid);
+    border-radius: 4px;
+    background: var(--white);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── ФИНАЛ ── */
+  .final-box {
+    background: var(--green);
+    color: var(--white);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+  }
+  .final-box h3 {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .final-box p {
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: rgba(255,255,255,.85);
+  }
+  .final-box p strong { color: var(--white); }
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .cta-btn {
+    background: var(--white);
+    color: var(--green);
+    padding: 10px 22px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .cta-btn.secondary {
+    background: rgba(255,255,255,.15);
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,.25);
+  }
+  .disclaimer {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+    border-top: 1px solid var(--beige-dark);
+    padding-top: 14px;
+    margin-top: 4px;
+  }
+
+  /* ── FOOTER ── */
+  .page-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    padding-top: 12px;
+    border-top: 1px solid var(--beige-dark);
+    font-size: 10px;
+    color: var(--beige-deep);
+  }
+  .page-footer strong { color: var(--green); }
+
+  @media print {
+    body { background: white; }
+    .cover { min-height: auto; padding: 40px; }
+    .page { min-height: auto; padding: 40px; }
+    .page-footer { display: none; }
+  }
+
+  .print-btn {
+    position: fixed;
+    top: 20px; right: 20px;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 100px;
+    padding: 10px 22px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 4px 16px rgba(46,125,50,.35);
+    z-index: 999;
+  }
+  @media print { .print-btn { display:none; } }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">Сохранить PDF ↓</button>
+
+<!-- ОБЛОЖКА -->
+<div class="cover">
+  <div>
+    <div class="cover-tag">Лид-магнит · Строительный контроль ИЖС</div>
+    <div class="cover-title">
+      Кто за что отвечает<br>
+      на стройке ИЖС<br>
+      <em>Карта ролей и шпаргалка</em>
+    </div>
+    <div class="cover-sub">
+      Чтобы держать позицию, когда подрядчик спрашивает «а ты кто такой?»,
+      и объяснять заказчику, за что он платит — со ссылкой на норму,
+      а не на привычку.
+    </div>
+    <div class="cover-pills">
+      <span class="cover-pill">Карта ролей по ГрК РФ</span>
+      <span class="cover-pill">5 ловушек и ответы</span>
+      <span class="cover-pill">Чек-лист до выхода на объект</span>
+    </div>
+  </div>
+  <div class="cover-footer">
+    <div class="cover-brand">СТРОИТЕЛЬНЫЙ КОНТРОЛЬ ИЖС</div>
+    <div class="cover-note">Справочный материал · 2025–2026</div>
+  </div>
+</div>
+
+<!-- СТРАНИЦА 1: КАРТА РОЛЕЙ -->
+<div class="page">
+  <div class="sec-num">Раздел 01</div>
+  <div class="sec-title">Карта ролей: кто — <em>за что</em> — на каком основании</div>
+  <div class="sec-lead">
+    Роли на стройке разведены законом. Кто чётко знает эту раскладку
+    со ссылкой на норму — тот держит позицию и не выглядит «человеком с рулеткой».
+  </div>
+
+  <table class="role-table">
+    <tr>
+      <th style="width:22%">Роль</th>
+      <th style="width:23%">Кто это</th>
+      <th style="width:35%">За что отвечает</th>
+      <th style="width:20%">Основание</th>
+    </tr>
+    <tr>
+      <td><span class="role-name">Застройщик</span><span class="role-sub">Собственник участка / тот, для кого строят</span></td>
+      <td>Физлицо или юрлицо, на чьём участке строится объект</td>
+      <td>Организует стройку, отвечает за объект в целом, может привлекать остальных участников</td>
+      <td><span class="norm">ГрК РФ</span></td>
+    </tr>
+    <tr>
+      <td><span class="role-name">Технический заказчик</span><span class="role-sub">Профессиональный представитель застройщика</span></td>
+      <td>Физлицо или юрлицо, действующее от имени застройщика</td>
+      <td>Заключает договоры на изыскания/проект/стройку, готовит задания, утверждает ПД, подписывает документы к вводу</td>
+      <td><span class="norm">ст. 1, п. 22 ГрК РФ</span></td>
+    </tr>
+    <tr>
+      <td><span class="role-name">Подрядчик</span><span class="role-sub">Компания/ИП, выполняющая работы</span></td>
+      <td>Лицо, осуществляющее строительство</td>
+      <td>Качество своих работ + <strong>собственный строительный контроль</strong> — проверяет сам себя</td>
+      <td><span class="norm">ст. 52, 53 ГрК РФ</span></td>
+    </tr>
+    <tr>
+      <td><span class="role-name">Стройконтроль подрядчика</span><span class="role-sub">Служба / специалист внутри подрядчика</span></td>
+      <td>Прораб, технический директор, ОТК — внутри строящей компании</td>
+      <td>Постоянный контроль своих работ «изнутри». Предусмотрен законом, но это контроль <em>самого себя</em></td>
+      <td><span class="norm">ст. 53 ГрК РФ</span><br><span class="norm">СП 543</span></td>
+    </tr>
+    <tr>
+      <td><span class="role-name">Независимый технадзор</span><span class="role-sub">Стройконтроль со стороны заказчика</span></td>
+      <td>Привлечённый заказчиком ИП, юрлицо или специалист</td>
+      <td>Контроль качества в интересах заказчика: приёмка этапов, скрытые работы, фиксация нарушений</td>
+      <td><span class="norm">ст. 53 ГрК РФ</span><br><span class="norm">(по договору)</span></td>
+    </tr>
+    <tr>
+      <td><span class="role-name">Авторский надзор</span><span class="role-sub">Проектировщик / архитектор</span></td>
+      <td>Автор проекта — тот, кто его разработал</td>
+      <td>Выборочная проверка соответствия стройки проектным решениям. Не постоянный контроль — только авторская проверка</td>
+      <td><span class="norm">СП 246</span></td>
+    </tr>
+    <tr>
+      <td><span class="role-name">Госстройнадзор (ГСН)</span><span class="role-sub">Государственный орган</span></td>
+      <td>Инспекция государственного строительного надзора</td>
+      <td>Надзор за объектами, подлежащими госэкспертизе. <strong>На ИЖС не распространяется</strong></td>
+      <td><span class="norm">ст. 54 ГрК РФ</span></td>
+    </tr>
+  </table>
+
+  <div class="sec-num" style="margin-top:8px">Три вывода из карты</div>
+  <div class="conclusions">
+    <div class="conclusion-card">
+      <div class="c-num">1</div>
+      <div class="c-text">
+        <strong>Подрядчик контролирует сам себя</strong> — это нормально по закону, но это конфликт интересов.
+        Независимый контроль в интересах заказчика — отдельная роль (ст. 53 ГрК РФ).
+      </div>
+    </div>
+    <div class="conclusion-card">
+      <div class="c-num">2</div>
+      <div class="c-text">
+        <strong>ГСН на ИЖС не приходит</strong> — государство частный дом не проверяет.
+        Значит, качество защищает только тот, кого привлёк заказчик.
+      </div>
+    </div>
+    <div class="conclusion-card">
+      <div class="c-num">3</div>
+      <div class="c-text">
+        <strong>Технадзор ≠ авторский надзор</strong>: авторский смотрит «соответствует ли проекту»,
+        технадзор — «соответствует ли нормам и качеству» постоянно и в интересах заказчика.
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <strong>СТРОИТЕЛЬНЫЙ КОНТРОЛЬ ИЖС</strong>
+    <span>Раздел 1 из 3 · Карта ролей</span>
+  </div>
+</div>
+
+<!-- СТРАНИЦА 2: ЛОВУШКИ -->
+<div class="page">
+  <div class="sec-num">Раздел 02</div>
+  <div class="sec-title">Пять ловушек, <em>на которых путают роли</em></div>
+  <div class="sec-lead">
+    На каждом объекте эти вопросы прилетят — от подрядчика, от заказчика или от банка.
+    Знаете ответ со ссылкой на норму — держите позицию.
+  </div>
+
+  <div class="traps">
+    <div class="trap-card">
+      <div class="trap-label">Ловушка 1</div>
+      <div class="trap-q">«Подрядчик и так строит — зачем ещё контролёр?»</div>
+      <div class="trap-a">
+        Подрядчик ведёт свой стройконтроль (ст. 53) — то есть проверяет сам себя.
+        <strong>Это как позволить продавцу самому взвешивать товар.</strong>
+        Независимый технадзор со стороны заказчика — это вторая, незаинтересованная сторона.
+        Закон её прямо предусматривает.
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-label">Ловушка 2</div>
+      <div class="trap-q">«Технадзор вообще обязателен?»</div>
+      <div class="trap-a">
+        Строительный контроль при договоре подряда — да, предусмотрен законом.
+        Но независимый технадзор со стороны частного заказчика — это его право, а не обязанность.
+        <strong>Аргумент здесь не «вы обязаны», а «цена ошибки»:</strong>
+        дефект фундамента или кровли стоит сотни тысяч — миллионы,
+        а выезд контроля — десятки тысяч.
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-label">Ловушка 3</div>
+      <div class="trap-q">«Банк аккредитовал подрядчика — значит качество проверено»</div>
+      <div class="trap-a">
+        Нет. Банки и эскроу защищают деньги заказчика, но
+        <strong>не проверяют качество стройки.</strong>
+        Аккредитация в банке ≠ проверка квалификации и надёжности.
+        Качество проверяет только независимый контроль.
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-label">Ловушка 4</div>
+      <div class="trap-q">«Госстройнадзор придёт и всё проверит»</div>
+      <div class="trap-a">
+        На ИЖС государственный стройнадзор <strong>не распространяется (ст. 54 ГрК РФ).</strong>
+        Никакой инспектор частный дом принимать не приедет.
+        Ответственность — на застройщике, и только он решает, привлекать ли независимого специалиста.
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-label">Ловушка 5</div>
+      <div class="trap-q">«Авторский надзор — это и есть технадзор»</div>
+      <div class="trap-a">
+        Нет. Авторский надзор ведёт проектировщик и выборочно смотрит, соответствует ли стройка его проекту (СП 246).
+        <strong>Технадзор — постоянный контроль соответствия нормам и качеству в интересах заказчика.</strong>
+        Это разные роли и разные люди.
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <strong>СТРОИТЕЛЬНЫЙ КОНТРОЛЬ ИЖС</strong>
+    <span>Раздел 2 из 3 · Пять ловушек</span>
+  </div>
+</div>
+
+<!-- СТРАНИЦА 3: ЧЕК-ЛИСТ -->
+<div class="page">
+  <div class="sec-num">Раздел 03</div>
+  <div class="sec-title">Чек-лист: как закрепить роль на объекте, <em>чтобы она была доказательной</em></div>
+  <div class="sec-lead">
+    Пройдите по пунктам до выхода на объект — и вопрос «а ты кто такой?» перестанет быть проблемой.
+  </div>
+
+  <div class="checklist-group">
+    <div class="cl-title">Основание для работы</div>
+    <div class="cl-items">
+      <div class="cl-item">
+        <div class="cl-box"></div>
+        <div>Есть договор со стороны заказчика / техзаказчика — это ваше основание по ст. 53 ГрК РФ</div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-box"></div>
+        <div>В предмете договора прямо указан «строительный контроль / технический надзор в интересах заказчика»</div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-box"></div>
+        <div>Прописаны этапы контроля и обязательная приёмка скрытых работ</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist-group">
+    <div class="cl-title">Как фиксировать — чтобы это была позиция, а не «мнение в чате»</div>
+    <div class="cl-items">
+      <div class="cl-item">
+        <div class="cl-box"></div>
+        <div>Каждое замечание по схеме: <strong>факт → пункт СП/ГОСТ → риск → рекомендация</strong></div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-box"></div>
+        <div>Фотофиксация с привязкой к дате и месту</div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-box"></div>
+        <div>Акт освидетельствования / акт осмотра — не переписка в мессенджере</div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-box"></div>
+        <div>Если подрядчик не участвует в осмотре — формулировка: «представитель подрядчика от участия в осмотре отказался»</div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-box"></div>
+        <div>Перечень контролируемых операций согласован заранее</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist-group">
+    <div class="cl-title">Как отвечать на «а ты кто такой?»</div>
+    <div class="cl-items">
+      <div class="cl-item">
+        <div class="cl-box"></div>
+        <div>Ссылка на договор с заказчиком + ст. 53 ГрК РФ (право заказчика привлекать контроль)</div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-box"></div>
+        <div>Не на эмоциях, а документ: «вот основание, вот норма, вот что зафиксировано»</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ФИНАЛ -->
+  <div class="final-box">
+    <h3>Коротко о главном</h3>
+    <p>
+      Роли на стройке ИЖС разведены законом: подрядчик контролирует себя,
+      авторский надзор смотрит проект, госнадзор к частному дому не приходит —
+      а качество в интересах заказчика защищает <strong>независимый технадзор.</strong>
+      Специалист, который знает это наизусть и подкрепляет документом,
+      не выглядит «человеком с рулеткой». Он выглядит стороной, которую слушают
+      заказчик, подрядчик и суд.
+    </p>
+    <div class="cta-row">
+      <a href="#" class="cta-btn">Подписаться на канал →</a>
+      <a href="#" class="cta-btn secondary">Узнать о курсе</a>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    Материал носит справочный характер и не является юридической консультацией.
+    По конкретному объекту сверяйтесь с действующими редакциями ГрК РФ (ст. 1, 52, 53, 54),
+    СП 543.1325800.2024, СП 246.1325800.2016 и профстандартом «Специалист строительного контроля»
+    (Приказ Минтруда № 558н, в силе с 01.03.2026).
+  </div>
+
+  <div class="page-footer">
+    <strong>СТРОИТЕЛЬНЫЙ КОНТРОЛЬ ИЖС</strong>
+    <span>Раздел 3 из 3 · Чек-лист специалиста</span>
+  </div>
+</div>
+
+</body>
+</html>
